@@ -35,9 +35,59 @@ Custom Banners also gives you many options for rotating banners within a positio
 Do you have a banner that's announcing a new special, but you want to hide it until the right time? No problem - with the Publish Time feature of Custom Banners you can setup your banner now, but not show it until the right time.
 
 == Installation ==
-Visit the Plugins menu in WordPress, and then click Add New. Then upload the zip file easy-banner.zip and follow the instructions on screen to activate it.
+
+= Add the Plugin to your Website =
+
+1. Download and Unzip http://downloads.wordpress.org/plugin/custom-banners.zip
+2. Upload the contents of '/custom-banners/' to the '/wp-content/plugins/' directory
+3. Activate Custom Banners through the 'Plugins' menu in WordPress
+
+This section describes how to use the plugin on your website.
+
+= Adding a New Banner =
+
+Adding a New Banner is easy! There are 3 ways to start adding a new banner
+
+*How to Add a New Banner*
+
+1. Click on "+ New" -> Banner, from the Admin Bar or
+2. Click on "Add New Banner" from the Menu Bar in the WordPress Admin or
+3. Click on "Add New Banner" from the top of the list of Banners, if you're viewing them all.
+
+= New Banner Content =
+
+You have a few things to pay attention to:
+
+- *Banner Title:* this is for internal reference.
+- *Banner Body:* this is the content of your Banner. This will be output in the Call to Action bar.
+- *Target URL:* where a user should be sent when they click on the banner or the call to action button.
+- *Call To Action Text:* the "Call To Action" (text) of the button. Leave this field blank to hide the call to action button.
+- *CSS Class:* any extra CSS classes that you would like applied to this banner.
+- *Featured Image:* this image is shown as the banner.
+
+= Editing a Banner =
+
+*This is as easy as adding a New Banner!*
+
+1. Click on "Banners" in the Admin Menu.
+2. Hover over the Banner you want to Edit and click "Edit".
+3. Change the fields to the desired content and click "Update".
+
+= Deleting a Banner =
+
+*This is as easy as adding a New Banner!*
+
+1. Click on "Banners" in the Admin Menu.
+2. Hover over the Banner you want to Delete and click "Delete". You can also change the Status of a Banner, if you want to keep it on file.
+
+= Outputting Banners =
+
+- To output a Random Banner, place the shortcode [banner] in the desired area of the Page or Post Content.
+- To output a specific Banner, place the shortcode [banner id=123] in the desired area of the Page or Post Content.
+- To output a Random Banner from a Specific Group, place the shortcode [banner group='test'] in the desired area of the Page or Post Content.
 
 == Frequently Asked Questions ==
+
 **Q:** What should I do if I don't want a call to action button?
 **A:** Simply leave the call to action text field blank
 
@@ -48,6 +98,7 @@ Visit the Plugins menu in WordPress, and then click Add New. Then upload the zip
 3. This is the List of Banner Groups - from here you can Create, Edit, or Delete a Banner Group.
 
 == Changelog ==
+
 = 1.0 =
 * Released!
 
