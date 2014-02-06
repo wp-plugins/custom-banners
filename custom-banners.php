@@ -1,16 +1,19 @@
+
 <?php
 /*
 Plugin Name: Custom Banners
 Plugin Script: custom-banners.php
 Plugin URI: http://goldplugins.com/our-plugins/custom-banners/
 Description: Allows you to create custom banners, which consist of an image, text, a link, and a call to action.  Custom banners are easily output via shortcodes. Each visitor to the website is then shown a random custom banner.
-Version: 1.0
+Version: 1.1
 Author: GoldPlugins
 Author URI: http://goldplugins.com/
 
 */
 
 require_once('gold-framework/plugin-base.php');
+require_once('lib/lib.php');
+require_once('lib/custom_banners_options.php');
 
 class CustomBannersPlugin extends GoldPlugin
 {
@@ -27,6 +30,8 @@ class CustomBannersPlugin extends GoldPlugin
 			
 		add_filter('manage_edit-banner_groups_columns', array($this, 'custom_banners_cat_column_head'), 10);  
 		add_action('manage_banner_groups_custom_column', array($this, 'custom_banners_cat_columns_content'), 10, 3); 
+		
+		$custom_banners_options = new customBannersOptions();
 		
 		parent::__construct();
 	}
@@ -61,19 +66,45 @@ class CustomBannersPlugin extends GoldPlugin
 		// load the shortcodes attributes and merge with our defaults
 		$defaults = array(	'id' => '',
 							'group' => '',
-							'caption_position' => 'bottom');
+							'caption_position' => 'bottom',
+							'transition' => 'none',
+							'count' => 1,
+							'timer' => 4000);
 		$atts = shortcode_atts($defaults, $atts);
 		$banner_id = intval($atts['id']);
 		
+		$html = '';
+		
 		// load the banner's data
 		if($banner_id == ''){
-			$banners = get_posts(array('posts_per_page' => 1, 'orderby' => 'rand', 'post_type'=> 'banner', 'banner_groups' => $atts['group']));
-			$banner = $banners[0];
-			$banner_id = $banner->ID;
+			$banners = get_posts(array('posts_per_page' => $atts['count'], 'orderby' => 'rand', 'post_type'=> 'banner', 'banner_groups' => $atts['group']));
+		
+			if(isValidCBKey() && ($atts['transition'] == 'fadeIn' || $atts['transition'] == 'scrollHorz')){
+				$html .= '<div class="cycle-slideshow" data-cycle-fx="' . $atts['transition'] . '" data-cycle-timeout="' . $atts['timer'] . '" data-cycle-slides="> div" data-cycle-auto-height="container" >';
+			}
+		
+			foreach($banners as $banner){
+				$html .= $this->buildBannerHTML($banner, $banner_id, $atts);
+			}
+			
+			if(isValidCBKey() && ($atts['transition'] == 'fadeIn' || $atts['transition'] == 'scrollHorz')){
+				$html .= '</div><!-- end slideshow -->';
+			}
 		} else {
 			$banner = get_post($banner_id);
+			
+			$html .= $this->buildBannerHTML($banner, $banner_id, $atts);
 		}
 		
+		// return the generated HTML
+		return $html;
+	}
+	
+	function buildBannerHTML($banner, $banner_id, $atts){
+		if($banner_id == ''){			
+			$banner_id = $banner->ID;		
+		}
+	
 		$post_thumbnail_id = get_post_thumbnail_id( $banner_id );
 		$cta = $this->get_option_value($banner_id, 'cta_text', '');
 		$target_url = $this->get_option_value($banner_id, 'target_url', '#');
@@ -140,7 +171,6 @@ class CustomBannersPlugin extends GoldPlugin
 			$html .= '</div>'; //<!--.banner -->
 		$html .= '</div>'; //<!--.banner_wrapper-->
 		
-		// return the generated HTML
 		return $html;
 	}
 	
@@ -149,10 +179,10 @@ class CustomBannersPlugin extends GoldPlugin
 		$cssUrl = plugins_url( 'assets/css/wp-banners.css' , __FILE__ );
 		$this->add_stylesheet('wp-banners-css',  $cssUrl);
 		
-		$jsUrl = plugins_url( 'assets/js/wp-banners.js' , __FILE__ );
-		$this->add_script('wp-banners-js',  $jsUrl);
-		
-		
+		if(isValidCBKey()){  
+			$jsUrl = plugins_url( 'assets/js/wp-banners.js' , __FILE__ );
+			$this->add_script('wp-banners-js',  $jsUrl, array( 'jquery' ));		
+		}
 	}
  
 	//this is the heading of the new column we're adding to the banner posts list

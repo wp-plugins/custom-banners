@@ -3,7 +3,7 @@ Contributors: georgehuger, richardgabriel
 Tags: banners, ads, rotating banners, custom banners, custom ads, custom rotating banners, random banners, random rotating banners
 Requires at least: 3.8
 Tested up to: 3.8.1
-Stable tag: 1.0
+Stable tag: 1.1
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -24,6 +24,8 @@ Instead, you'll be able to manage that banner right from the WordPress dashboard
 Custom Banners lets you optionally specify a caption and a call-to-action text and URL for each banner, making your banners an effective way to drive visitors to your most important pages.
 
 Use the captions to announce a new special, and use the call-to-action button to let your customers claim it right away.
+
+- With the Pro version, easily add Fading or Sliding banners throughout your site!
 
 Example:
 "Get Two Free Personal Training Sessions With A New Yearly Membership [Sign up Now]"
@@ -86,6 +88,11 @@ You have a few things to pay attention to:
 - To output a specific Banner, place the shortcode [banner id=123] in the desired area of the Page or Post Content.
 - To output a Random Banner from a Specific Group, place the shortcode [banner group='test'] in the desired area of the Page or Post Content.
 
+= Outputting Fading or Sliding Banners =
+* NOTE: This feature requires the Pro version of Custom Banners: http://goldplugins.com/our-plugins/custom-banners/
+- To output Random Banners from a Specific Group, place the shortcode [banner group='test' count='3' transition='scrollHorz' timer='2000'] in the desired area of the Page or Post Content.  Change the value of count from 3 to however many slides you want to use.  For transition, use either 'scrollHorz' or 'fadeIn'.  For timer, use 1000 times the number of seconds you want between transitions (ie, for 4 seconds input 4000.)
+- To output Random Banners, place the shortcode [banner count='3' transition='scrollHorz' timer='2000'] in the desired area of the Page or Post Content.  Change the value of count from 3 to however many slides you want to use.  For transition, use either 'scrollHorz' or 'fadeIn'.  For timer, use 1000 times the number of seconds you want between transitions (ie, for 4 seconds input 4000.)
+
 == Frequently Asked Questions ==
 
 **Q:** What should I do if I don't want a call to action button?
@@ -99,9 +106,12 @@ You have a few things to pay attention to:
 
 == Changelog ==
 
+= 1.1 =
+* Adds Support for JS Transitions.
+
 = 1.0 =
 * Released!
 
 == Upgrade Notice ==
 
-* 1.0: Initial Release!
+* 1.1: Upgrade Available!
