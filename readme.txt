@@ -3,7 +3,7 @@ Contributors: georgehuger, richardgabriel
 Tags: banners, ads, rotating banners, custom banners, custom ads, custom rotating banners, random banners, random rotating banners
 Requires at least: 3.8
 Tested up to: 3.8.1
-Stable tag: 1.1
+Stable tag: 1.1.1
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -106,6 +106,9 @@ You have a few things to pay attention to:
 
 == Changelog ==
 
+= 1.1.1 =
+* Bugfix
+
 = 1.1 =
 * Adds Support for JS Transitions.
 
@@ -114,4 +117,4 @@ You have a few things to pay attention to:
 
 == Upgrade Notice ==
 
-* 1.1: Upgrade Available!
+* 1.1.1: Fix Available!
