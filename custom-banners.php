@@ -4,7 +4,7 @@ Plugin Name: Custom Banners
 Plugin Script: custom-banners.php
 Plugin URI: http://goldplugins.com/our-plugins/custom-banners/
 Description: Allows you to create custom banners, which consist of an image, text, a link, and a call to action.  Custom banners are easily output via shortcodes. Each visitor to the website is then shown a random custom banner.
-Version: 1.1.1
+Version: 1.2
 Author: GoldPlugins
 Author URI: http://goldplugins.com/
 
@@ -48,6 +48,21 @@ class CustomBannersPlugin extends GoldPlugin
 		$customFields[] = array('name' => 'cta_text', 'title' => 'Call To Action Text', 'description' => 'The "Call To Action" (text) of the button. Leave this field blank to hide the call to action button.', 'type' => 'text');
 		$customFields[] = array('name' => 'css_class', 'title' => 'CSS Class', 'description' => 'Any extra CSS classes that you would like applied to this banner.', 'type' => 'text');
 		$this->add_custom_post_type($postType, $customFields);
+		
+		//load list of current posts that have featured images	
+		$supportedTypes = get_theme_support( 'post-thumbnails' );
+		
+		//none set, add them just to our type
+		if( $supportedTypes === false ){
+			add_theme_support( 'post-thumbnails', array( 'banner' ) );       
+			//for the banner images    
+		}
+		//specifics set, add our to the array
+		elseif( is_array( $supportedTypes ) ){
+			$supportedTypes[0][] = 'banner';
+			add_theme_support( 'post-thumbnails', $supportedTypes[0] );
+			//for the banner images
+		}
 	}
 	
 	function register_taxonomies()
@@ -78,15 +93,15 @@ class CustomBannersPlugin extends GoldPlugin
 		if($banner_id == ''){
 			$banners = get_posts(array('posts_per_page' => $atts['count'], 'orderby' => 'rand', 'post_type'=> 'banner', 'banner_groups' => $atts['group']));
 		
-			if(isValidCBKey() && ($atts['transition'] == 'fadeIn' || $atts['transition'] == 'scrollHorz')){
-				$html .= '<div class="cycle-slideshow" data-cycle-fx="' . $atts['transition'] . '" data-cycle-timeout="' . $atts['timer'] . '" data-cycle-slides="> div" data-cycle-auto-height="container" >';
+			if(isValidCBKey() && (in_array($atts['transition'], array('fadeIn','fadeOut','scrollHorz','scrollVert','shuffle','carousel','flipHorz','flipVert','tileSlide')))){
+				$html .= '<div class="cycle-slideshow" data-cycle-fx="' . $atts['transition'] . '" data-cycle-timeout="' . $atts['timer'] . '" data-cycle-slides="> div" >';
 			}
 		
 			foreach($banners as $banner){
 				$html .= $this->buildBannerHTML($banner, $banner_id, $atts);
 			}
 			
-			if(isValidCBKey() && ($atts['transition'] == 'fadeIn' || $atts['transition'] == 'scrollHorz')){
+			if(isValidCBKey() && (in_array($atts['transition'], array('fadeIn','fadeOut','scrollHorz','scrollVert','shuffle','carousel','flipHorz','flipVert','tileSlide')))){
 				$html .= '</div><!-- end slideshow -->';
 			}
 		} else {
@@ -179,8 +194,16 @@ class CustomBannersPlugin extends GoldPlugin
 		$this->add_stylesheet('wp-banners-css',  $cssUrl);
 		
 		if(isValidCBKey()){  
+			//need to include cycle2 this way, for compatibility with our other plugins
+			$jsUrl = plugins_url( 'assets/js/jquery.cycle2.min.js' , __FILE__ );
+			$this->add_script('cycle2',  $jsUrl, array( 'jquery' ),
+			false,
+			true);		
+			
 			$jsUrl = plugins_url( 'assets/js/wp-banners.js' , __FILE__ );
-			$this->add_script('wp-banners-js',  $jsUrl, array( 'jquery' ));		
+			$this->add_script('wp-banners-js',  $jsUrl, array( 'jquery' ),
+			false,
+			true);		
 		}
 	}
  

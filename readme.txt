@@ -3,7 +3,7 @@ Contributors: georgehuger, richardgabriel
 Tags: banners, ads, rotating banners, custom banners, custom ads, custom rotating banners, random banners, random rotating banners
 Requires at least: 3.8
 Tested up to: 3.8.1
-Stable tag: 1.1.1
+Stable tag: 1.2
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -87,11 +87,14 @@ You have a few things to pay attention to:
 - To output a Random Banner, place the shortcode [banner] in the desired area of the Page or Post Content.
 - To output a specific Banner, place the shortcode [banner id=123] in the desired area of the Page or Post Content.
 - To output a Random Banner from a Specific Group, place the shortcode [banner group='test'] in the desired area of the Page or Post Content.
+- To control the postion of the Caption, use the attribute caption_position="left".  Acceptable values are left, right, top, bottom.  For example, [banner caption_positon="left"].
 
 = Outputting Fading or Sliding Banners =
 * NOTE: This feature requires the Pro version of Custom Banners: http://goldplugins.com/our-plugins/custom-banners/
+* LIVE Examples are available here: http://goldplugins.com/documentation/custom-banners-documentation/custom-banners-pro-examples/
 - To output Random Banners from a Specific Group, place the shortcode [banner group='test' count='3' transition='scrollHorz' timer='2000'] in the desired area of the Page or Post Content.  Change the value of count from 3 to however many slides you want to use.  For transition, use either 'scrollHorz' or 'fadeIn'.  For timer, use 1000 times the number of seconds you want between transitions (ie, for 4 seconds input 4000.)
 - To output Random Banners, place the shortcode [banner count='3' transition='scrollHorz' timer='2000'] in the desired area of the Page or Post Content.  Change the value of count from 3 to however many slides you want to use.  For transition, use either 'scrollHorz' or 'fadeIn'.  For timer, use 1000 times the number of seconds you want between transitions (ie, for 4 seconds input 4000.)
+- Supported transitions are "scrollVert","scrollHorz","fadeIn","fadeOut","flipHorz","flipVert", and "tileSlide".
 
 == Frequently Asked Questions ==
 
@@ -106,6 +109,10 @@ You have a few things to pay attention to:
 
 == Changelog ==
 
+= 1.2 =
+* Adds support for Vertical Scrolling, Shuffling, Flipping, and Tiling.
+* Enables Featured Image functionality for all sites.
+
 = 1.1.1 =
 * Bugfix
 
@@ -117,4 +124,4 @@ You have a few things to pay attention to:
 
 == Upgrade Notice ==
 
-* 1.1.1: Fix Available!
+* 1.2: New Transitions Available!
