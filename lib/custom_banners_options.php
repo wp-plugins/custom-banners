@@ -41,6 +41,7 @@ class customBannersOptions
 	function register_settings(){
 		//register our settings
 		register_setting( 'custom-banners-settings-group', 'custom_banners_custom_css' );
+		register_setting( 'custom-banners-settings-group', 'custom_banners_use_big_link' );
 		
 		register_setting( 'custom-banners-settings-group', 'custom_banners_registered_name' );
 		register_setting( 'custom-banners-settings-group', 'custom_banners_registered_url' );
@@ -55,7 +56,7 @@ class customBannersOptions
 		<h2><?php echo $title; ?></h2>
 		
 		<?php if(!isValidCBKey()): ?>			
-			<!-- Begin MailChimp Signup Form -->
+			<link href="//cdn-images.mailchimp.com/embedcode/slim-081711.css" rel="stylesheet" type="text/css">
 			<style type="text/css">
 				/* MailChimp Form Embed Code - Slim - 08/17/2011 */
 				#mc_embed_signup form {display:block; position:relative; text-align:left; padding:10px 0 10px 3%}
@@ -64,24 +65,67 @@ class customBannersOptions
 				#mc_embed_signup input[type=checkbox]{-webkit-appearance:checkbox;}
 				#mc_embed_signup input[type=radio]{-webkit-appearance:radio;}
 				#mc_embed_signup input:focus {border-color:#333;}
-				#mc_embed_signup .button {clear:both; background-color: #aaa; border: 0 none; border-radius:4px; color: #FFFFFF; cursor: pointer; display: inline-block; font-size:15px; font-weight: bold; height: 32px; line-height: 32px; margin: 0 5px 10px 0; padding:0; text-align: center; text-decoration: none; vertical-align: top; white-space: nowrap; width: auto;}
-				#mc_embed_signup .button:hover {background-color:#777;}
+				#mc_embed_signup .button {
+					clear:both;
+					background-color: #FFA500;
+					border: 0 none;
+					border-radius:4px;
+					box-shadow: 0 1px 0 rgba(255, 255, 255, 0.38) inset;
+					color: #FFFFFF;
+					cursor: pointer;
+					display: inline-block;
+					font-size:15px;
+					font-weight: bold;
+					height: auto;
+					margin: 0 5px 10px 0;
+					padding: 10px 10px 10px;
+					text-align: center;
+					text-decoration: none;
+					vertical-align: middle;
+					white-space: nowrap;
+					width: auto;
+				}
+				#mc_embed_signup .button:hover {background-color:green;}
 				#mc_embed_signup .small-meta {font-size: 11px;}
 				#mc_embed_signup .nowrap {white-space:nowrap;}     
 				#mc_embed_signup .clear {clear:none; display:inline;}
 
-				#mc_embed_signup label {display:block; font-size:16px; padding-bottom:10px; font-weight:bold;}
-				#mc_embed_signup input.email {display:block; padding:8px 0; margin:0 4% 10px 0; text-indent:5px; width:58%; min-width:130px;}
-				#mc_embed_signup input.button {display:block; width:35%; margin:0 0 10px 0; min-width:90px;}
+				#mc_embed_signup label {
+					display:block; 
+					font-family: georgia;
+					font-size: 30px;
+					font-weight:bold;
+					margin-bottom: 0px;					
+					padding-bottom:0px; 				
+				}
+				#mc_embed_signup input.email {display:block; padding:8px 0; margin:0 4% 10px 0; text-indent:5px; width:95%; min-width:130px;}
+				#mc_embed_signup input.button {display:block; width:35%; margin:15px 0 30px; min-width:90px;}
 
 				#mc_embed_signup div#mce-responses {float:left; top:-1.4em; padding:0em .5em 0em .5em; overflow:hidden; width:90%;margin: 0 5%; clear: both;}
 				#mc_embed_signup div.response {margin:1em 0; padding:1em .5em .5em 0; font-weight:bold; float:left; top:-1.5em; z-index:1; width:80%;}
 				#mc_embed_signup #mce-error-response {display:none;}
 				#mc_embed_signup #mce-success-response {color:#529214; display:none;}
 				#mc_embed_signup label.error {display:block; float:none; width:auto; margin-left:1.05em; text-align:left; padding:.5em 0;}
-				#mc_embed_signup{background:#EEE; color:green; clear:left; font:14px Helvetica,Arial,sans-serif; }
+				#mc_embed_signup {
+					background: none repeat scroll 0 0 #FDF5E6;
+					border: 1px solid #008000;
+					clear: left;
+					color: #008000;
+					font: 14px Helvetica,Arial,sans-serif;
+					margin: 20px 0 30px;
+					max-width: 650px;
+					padding: 20px 30px;
+				}
 				#mc_embed_signup form{padding: 10px}
-				#mc_embed_signup input.button{color:green;}
+				#mc_embed_signup input.button{    
+					background-color: #689C23;
+					border: 1px solid #4D7C0A;
+					color: #FFFFFF;
+				}
+				#mc_embed_signup .new_subs {
+					font-style:italic;
+					margin-bottom: 0;
+				}
 				/* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
 				   We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
 			</style>
@@ -89,8 +133,8 @@ class customBannersOptions
 			<form action="http://illuminatikarate.us2.list-manage.com/subscribe/post?u=403e206455845b3b4bd0c08dc&amp;id=27d2c9ee87" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
 				<label for="mce-EMAIL">Subscribe to our mailing list</label>
 				<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
-				<p>New subscribers will receive a discount code good for any version of <a href="http://goldplugins.com/our-plugins/custom-banners/">Custom Banners Pro</a>!</p>
 				<div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+				<p class="new_subs">New subscribers will receive a discount code good for any version of <a href="http://goldplugins.com/our-plugins/custom-banners/">Custom Banners Pro</a>!</p>
 			</form>
 			</div>
 			<!--End mc_embed_signup-->
@@ -112,6 +156,15 @@ class customBannersOptions
 					<th scope="row"><label for="custom_banners_custom_css">Custom CSS</a></th>
 					<td><textarea name="custom_banners_custom_css" id="custom_banners_custom_css" style="width: 250px; height: 250px;"><?php echo get_option('custom_banners_custom_css'); ?></textarea>
 					<p class="description">Input any Custom CSS you want to use here.  The plugin will work without you placing anything here - this is useful in case you need to edit any styles for it to work with your theme, though.</p></td>
+				</tr>
+			</table>
+			
+			<table class="form-table">
+				<tr valign="top">
+					<th scope="row"><label for="custom_banners_use_big_link">Link Entire Banner</label></th>
+					<td><input type="checkbox" name="custom_banners_use_big_link" id="custom_banners_use_big_link" value="1" <?php if(get_option('custom_banners_use_big_link')){ ?> checked="CHECKED" <?php } ?>/>
+					<p class="description">If checked, the entire banner will be linked to the Target URL - not just the CTA.</p>
+					</td>
 				</tr>
 			</table>
 			

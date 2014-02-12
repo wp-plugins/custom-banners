@@ -4,7 +4,7 @@ Plugin Name: Custom Banners
 Plugin Script: custom-banners.php
 Plugin URI: http://goldplugins.com/our-plugins/custom-banners/
 Description: Allows you to create custom banners, which consist of an image, text, a link, and a call to action.  Custom banners are easily output via shortcodes. Each visitor to the website is then shown a random custom banner.
-Version: 1.2
+Version: 1.2.1
 Author: GoldPlugins
 Author URI: http://goldplugins.com/
 
@@ -123,6 +123,7 @@ class CustomBannersPlugin extends GoldPlugin
 		$cta = $this->get_option_value($banner_id, 'cta_text', '');
 		$target_url = $this->get_option_value($banner_id, 'target_url', '#');
 		$css_class = $this->get_option_value($banner_id, 'css_class', '');	
+		$use_big_link = get_option('custom_banners_use_big_link');
 		
 		// placeholder variables
 		$html = '';
@@ -172,6 +173,9 @@ class CustomBannersPlugin extends GoldPlugin
 		// generate the html now
 		$html .= '<div class="banner_wrapper">';
 			$html .= '<div class="banner ' . $extra_classes_str . '" style="' . $banner_style . '">';
+				if($use_big_link){
+					$html .= '<a class="custom_banners_big_link" href="' . $target_url . '"></a>';
+				}
 				$html .= $img_html;
 				$html .= '<div class="banner_caption">';
 					$html .= $banner->post_content;

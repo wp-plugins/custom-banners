@@ -1,9 +1,9 @@
 === Custom Banners ===
-Contributors: georgehuger, richardgabriel
+Contributors: ghuger, richardgabriel
 Tags: banners, ads, rotating banners, custom banners, custom ads, custom rotating banners, random banners, random rotating banners
 Requires at least: 3.8
 Tested up to: 3.8.1
-Stable tag: 1.2
+Stable tag: 1.2.1
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -98,8 +98,14 @@ You have a few things to pay attention to:
 
 == Frequently Asked Questions ==
 
-**Q:** What should I do if I don't want a call to action button?
-**A:** Simply leave the call to action text field blank
+= What should I do if I don't want a call to action button? =
+
+Simply leave the call to action text field blank
+
+= How do I link the entire Banner to the Target URL and not just the Call To Action Button? =
+
+On the Options screen, check the box next to "Link Entire Banner".
+
 
 == Screenshots ==
 
@@ -108,6 +114,9 @@ You have a few things to pay attention to:
 3. This is the List of Banner Groups - from here you can Create, Edit, or Delete a Banner Group.
 
 == Changelog ==
+
+= 1.2.1 =
+* Adds ability to link the entire banner to the target URL, not just the call to action button.
 
 = 1.2 =
 * Adds support for Vertical Scrolling, Shuffling, Flipping, and Tiling.
@@ -124,4 +133,4 @@ You have a few things to pay attention to:
 
 == Upgrade Notice ==
 
-* 1.2: New Transitions Available!
+* 1.2.1: Update available!
