@@ -55,6 +55,8 @@ class customBannersOptions
 	<div class="wrap">
 		<h2><?php echo $title; ?></h2>
 		
+		<p class="cb_need_help">Need Help? <a href="http://goldplugins.com/documentation/custom-banners-documentation/" target="_blank">Click here</a> to read instructions, see examples, and find more information on how to add, edit, update, and output your custom banners.</p>
+		
 		<?php if(!isValidCBKey()): ?>			
 			<link href="//cdn-images.mailchimp.com/embedcode/slim-081711.css" rel="stylesheet" type="text/css">
 			<style type="text/css">
@@ -155,7 +157,7 @@ class customBannersOptions
 				<tr valign="top">
 					<th scope="row"><label for="custom_banners_custom_css">Custom CSS</a></th>
 					<td><textarea name="custom_banners_custom_css" id="custom_banners_custom_css" style="width: 250px; height: 250px;"><?php echo get_option('custom_banners_custom_css'); ?></textarea>
-					<p class="description">Input any Custom CSS you want to use here.  The plugin will work without you placing anything here - this is useful in case you need to edit any styles for it to work with your theme, though.</p></td>
+					<p class="description">Input any Custom CSS you want to use here.  The plugin will work without you placing anything here - this is useful in case you need to edit any styles for it to work with your theme, though.<br/> For a list of available classes, click <a href="http://goldplugins.com/documentation/custom-banners-documentation/html-css-information-for-custom-banners/" target="_blank">here</a>.</p></td>
 				</tr>
 			</table>
 			

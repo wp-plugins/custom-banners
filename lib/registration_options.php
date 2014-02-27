@@ -19,6 +19,7 @@
     width: 860px;
 }
 </style>	
+<?php if(!isValidMSCBKey()): ?>
 <table class="form-table">
 	<tr valign="top">
 		<th scope="row"><label for="custom_banners_registered_name">Email Address</label></th>
@@ -45,3 +46,4 @@
 		</td>
 	</tr>
 </table>
+<?php endif; ?>

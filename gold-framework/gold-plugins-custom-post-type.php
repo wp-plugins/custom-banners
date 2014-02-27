@@ -15,6 +15,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with a Gold Plugin.  If not, see <http://www.gnu.org/licenses/>.
 */
+if(!class_exists("GoldPlugins_CustomPostType")):
 class GoldPlugins_CustomPostType
 {
 	var $customFields = false;
@@ -58,7 +59,6 @@ class GoldPlugins_CustomPostType
 				'rewrite' => array( 'slug' => $postType['slug'], 'with_front' => (strlen($postType['slug'])>0) ? false : true),
 				'capability_type' => 'post',
 				'hierarchical' => false,
-				'menu_position' => 20,
 				'supports' => array('title','editor','author','thumbnail','excerpt','comments','custom-fields'),
 			); 
 			$this->customPostTypeArgs = $args;
@@ -213,4 +213,5 @@ class GoldPlugins_CustomPostType
 		}				
 	}
 }
+endif;
 ?>

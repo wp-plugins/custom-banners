@@ -3,7 +3,7 @@ Contributors: ghuger, richardgabriel
 Tags: banners, ads, rotating banners, custom banners, custom ads, custom rotating banners, random banners, random rotating banners
 Requires at least: 3.8
 Tested up to: 3.8.1
-Stable tag: 1.2.1
+Stable tag: 1.2.2
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -88,6 +88,7 @@ You have a few things to pay attention to:
 - To output a specific Banner, place the shortcode [banner id=123] in the desired area of the Page or Post Content.
 - To output a Random Banner from a Specific Group, place the shortcode [banner group='test'] in the desired area of the Page or Post Content.
 - To control the postion of the Caption, use the attribute caption_position="left".  Acceptable values are left, right, top, bottom.  For example, [banner caption_positon="left"].
+- To use an image tag, instead of background image, for the banner, add the attribute "use_image_tag=true" to your banner shortcode.  For example, [banner use_image_tag=true].
 
 = Outputting Fading or Sliding Banners =
 * NOTE: This feature requires the Pro version of Custom Banners: http://goldplugins.com/our-plugins/custom-banners/
@@ -106,6 +107,9 @@ Simply leave the call to action text field blank
 
 On the Options screen, check the box next to "Link Entire Banner".
 
+= I want my banners viewable at their Permalinks, but I get a 404 message - what gives? =
+
+Alright - all you need to do is go to Settings -> Permalinks and click the Save button.  This should take care of the issue!
 
 == Screenshots ==
 
@@ -114,6 +118,9 @@ On the Options screen, check the box next to "Link Entire Banner".
 3. This is the List of Banner Groups - from here you can Create, Edit, or Delete a Banner Group.
 
 == Changelog ==
+
+= 1.2.2 =
+* Adds ability to output image in img attribute as well as background image.
 
 = 1.2.1 =
 * Adds ability to link the entire banner to the target URL, not just the call to action button.
@@ -133,4 +140,4 @@ On the Options screen, check the box next to "Link Entire Banner".
 
 == Upgrade Notice ==
 
-* 1.2.1: Update available!
+* 1.2.2: Update available!

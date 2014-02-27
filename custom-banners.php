@@ -4,7 +4,7 @@ Plugin Name: Custom Banners
 Plugin Script: custom-banners.php
 Plugin URI: http://goldplugins.com/our-plugins/custom-banners/
 Description: Allows you to create custom banners, which consist of an image, text, a link, and a call to action.  Custom banners are easily output via shortcodes. Each visitor to the website is then shown a random custom banner.
-Version: 1.2.1
+Version: 1.2.2
 Author: GoldPlugins
 Author URI: http://goldplugins.com/
 
@@ -29,7 +29,7 @@ class CustomBannersPlugin extends GoldPlugin
 			
 		add_filter('manage_edit-banner_groups_columns', array($this, 'custom_banners_cat_column_head'), 10);  
 		add_action('manage_banner_groups_custom_column', array($this, 'custom_banners_cat_columns_content'), 10, 3); 
-		
+			
 		$custom_banners_options = new customBannersOptions();
 		
 		parent::__construct();
@@ -83,7 +83,9 @@ class CustomBannersPlugin extends GoldPlugin
 							'caption_position' => 'bottom',
 							'transition' => 'none',
 							'count' => 1,
-							'timer' => 4000);
+							'timer' => 4000,
+							'use_image_tag' => false);
+							
 		$atts = shortcode_atts($defaults, $atts);
 		$banner_id = intval($atts['id']);
 		
@@ -154,12 +156,12 @@ class CustomBannersPlugin extends GoldPlugin
 		$extra_classes_str = implode(' ', $extra_classes);
 		
 		// we can use either a background image on the banner div, or an <img> tag inside the banner div instead
-		$option_use_bg_image = true; // todo: this is supported below; we just need to wire up an option on the user's side to toggle
+		$option_use_image_tag = isset($atts['use_image_tag']) ? $atts['use_image_tag'] : false;
 		
 		// load the featured image, of one was specified
 		if ($post_thumbnail_id !== '' && $post_thumbnail_id > 0)
 		{
-			if ($option_use_bg_image) 
+			if (!$option_use_image_tag) 
 			{
 				$img_src = wp_get_attachment_image_src($post_thumbnail_id, 'full');
 				$banner_style = "background-image: url('" . $img_src[0] . "');";
