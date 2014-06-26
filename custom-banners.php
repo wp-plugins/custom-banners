@@ -4,7 +4,7 @@ Plugin Name: Custom Banners
 Plugin Script: custom-banners.php
 Plugin URI: http://goldplugins.com/our-plugins/custom-banners/
 Description: Allows you to create custom banners, which consist of an image, text, a link, and a call to action.  Custom banners are easily output via shortcodes. Each visitor to the website is then shown a random custom banner.
-Version: 1.2.2.1
+Version: 1.2.2.2
 Author: GoldPlugins
 Author URI: http://goldplugins.com/
 
@@ -99,7 +99,18 @@ class CustomBannersPlugin extends GoldPlugin
 				$html .= '<div class="cycle-slideshow" data-cycle-fx="' . $atts['transition'] . '" data-cycle-timeout="' . $atts['timer'] . '" data-cycle-slides="> div" >';
 			}
 		
+			$first = true;
+		
 			foreach($banners as $banner){
+				
+				//hide all but the first banner
+				if($first){
+					$atts['hide'] = false;
+					$first = false;
+				} else {
+					$atts['hide'] = true;
+				}
+				
 				$html .= $this->buildBannerHTML($banner, $banner_id, $atts);
 			}
 			
@@ -172,8 +183,14 @@ class CustomBannersPlugin extends GoldPlugin
 			}			
 		}		
 		
+		if($atts['hide']){
+			$banner_display = 'style="display:none;"';
+		} else {
+			$banner_display = '';
+		}
+		
 		// generate the html now
-		$html .= '<div class="banner_wrapper">';
+		$html .= '<div class="banner_wrapper" '. $banner_display .'>';
 			$html .= '<div class="banner ' . $extra_classes_str . '" style="' . $banner_style . '">';
 				if($use_big_link){
 					$html .= '<a class="custom_banners_big_link" href="' . $target_url . '"></a>';
