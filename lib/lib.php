@@ -8,8 +8,9 @@ function isValidCBKey(){
 	
 	$keygen = new CBKG();
 	$computedKey = $keygen->computeKey($webaddress, $email);
+	$computedKeyEJ = $keygen->computeKeyEJ($email);
 
-	if ($key == $computedKey) {
+	if ($key == $computedKey || $key == $computedKeyEJ) {
 		return true;
 	} else {
 		$plugin = "custom-banners-pro/custom-banners-pro.php";

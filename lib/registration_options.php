@@ -28,8 +28,8 @@
 		</td>
 	</tr>
 </table>
-	
-<table class="form-table">
+
+<table class="form-table" style="display: none;">
 	<tr valign="top">
 		<th scope="row"><label for="custom_banners_registered_url">Website Address</label></th>
 		<td><input type="text" name="custom_banners_registered_url" id="custom_banners_registered_url" value="<?php echo get_option('custom_banners_registered_url'); ?>"  style="width: 250px" />

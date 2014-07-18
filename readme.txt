@@ -3,7 +3,7 @@ Contributors: ghuger, richardgabriel
 Tags: banners, ads, rotating banners, custom banners, custom ads, custom rotating banners, random banners, random rotating banners
 Requires at least: 3.8
 Tested up to: 3.9.1
-Stable tag: 1.2.2.2
+Stable tag: 1.2.2.3
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -119,6 +119,9 @@ Alright - all you need to do is go to Settings -> Permalinks and click the Save 
 
 == Changelog ==
 
+= 1.2.2.3 =
+* Minor registration update.
+
 = 1.2.2.2 =
 * Update: hide all but the first banner when displaying a transitioning banner.
 
@@ -146,4 +149,4 @@ Alright - all you need to do is go to Settings -> Permalinks and click the Save 
 
 == Upgrade Notice ==
 
-* 1.2.2.1: Minor Update available!
+* 1.2.2.3: Minor Update available!
