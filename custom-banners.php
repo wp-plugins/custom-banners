@@ -4,7 +4,7 @@ Plugin Name: Custom Banners
 Plugin Script: custom-banners.php
 Plugin URI: http://goldplugins.com/our-plugins/custom-banners/
 Description: Allows you to create custom banners, which consist of an image, text, a link, and a call to action.  Custom banners are easily output via shortcodes. Each visitor to the website is then shown a random custom banner.
-Version: 1.2.2.3
+Version: 1.2.3
 Author: GoldPlugins
 Author URI: http://goldplugins.com/
 
@@ -23,6 +23,9 @@ class CustomBannersPlugin extends GoldPlugin
 		$this->register_taxonomies();
 		$this->add_shortcodes();
 		$this->add_stylesheets_and_scripts();
+		
+		//register sidebar widgets
+		add_action( 'widgets_init', array($this, 'custom_banners_register_widgets' ));
 				
 		add_filter('manage_banner_posts_columns', array($this, 'custom_banners_column_head'), 10);  
 		add_action('manage_banner_posts_custom_column', array($this, 'custom_banners_columns_content'), 10, 2); 
@@ -84,7 +87,8 @@ class CustomBannersPlugin extends GoldPlugin
 							'transition' => 'none',
 							'count' => 1,
 							'timer' => 4000,
-							'use_image_tag' => false);
+							'use_image_tag' => false,
+							'hide' => false);
 							
 		$atts = shortcode_atts($defaults, $atts);
 		$banner_id = intval($atts['id']);
@@ -259,6 +263,15 @@ class CustomBannersPlugin extends GoldPlugin
 		$category = get_term_by('id', $tax_id, 'banner_groups');
 		
 		return "<code>[banner group='{$category->slug}']</code>"; 
+	}
+
+	//register any widgets here
+	function custom_banners_register_widgets() {
+		include('lib/widgets/single_banner_widget.php');
+		include('lib/widgets/rotating_banner_widget.php');
+		
+		register_widget( 'singleBannerWidget' );
+		register_widget( 'rotatingBannerWidget' );
 	}
 }
 $ebp = new CustomBannersPlugin();

@@ -2,8 +2,8 @@
 Contributors: ghuger, richardgabriel
 Tags: banners, ads, rotating banners, custom banners, custom ads, custom rotating banners, random banners, random rotating banners
 Requires at least: 3.8
-Tested up to: 3.9.1
-Stable tag: 1.2.2.3
+Tested up to: 3.9.2
+Stable tag: 1.2.3
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -12,28 +12,32 @@ Custom Banners provides a simple interface to upload several banners and show a 
 == Description ==
 Custom Banners is a WordPress plugin that allows you to easily manage several banners (ads) and display them on the front end.
 
-- Create Banners Once, and Reuse Them Throughout Your Website -
+**Create Banners Once, and Reuse Them Throughout Your Website**
+
 Use custom banners to create resuable banners that your whole team can use! Setup the banners once, and you'll be able to re-use them throughout the website. Best of all, if you need to make an update you can just make it once.
 
-- Update Your Banners Without Touching Your Code -
-Simply place a shortcode into the page where you'd like your banner to appear, and then you'll never have to edit that page again!
+**Update Your Banners Without Touching Your Code**
+
+Simply place a shortcode into the page where you'd like your banner to appear, and then you'll never have to edit that page again!  Custom Banners is also implemented as an easy-to-use Widget!
 
 Instead, you'll be able to manage that banner right from the WordPress dashboard, uploading new banners and taking down old ones as you like. All without having to edit your pages.
 
-- Easily Add Captions and Call-To-Action Buttons To Your Custom Banners -
+**Easily Add Captions and Call-To-Action Buttons To Your Custom Banners**
+
 Custom Banners lets you optionally specify a caption and a call-to-action text and URL for each banner, making your banners an effective way to drive visitors to your most important pages.
 
 Use the captions to announce a new special, and use the call-to-action button to let your customers claim it right away.
 
-- With the Pro version, easily add Fading or Sliding banners throughout your site!
+**With the Pro version, easily add Fading or Sliding banners throughout your site!**
 
-Example:
-"Get Two Free Personal Training Sessions With A New Yearly Membership [Sign up Now]"
+Click here to see live examples: http://goldplugins.com/documentation/custom-banners-documentation/custom-banners-pro-examples/
 
-- Rotate Between Several Banners with Banner Groups -
+**Rotate Between Several Banners with Banner Groups**
+
 Custom Banners also gives you many options for rotating banners within a position. So you can specify several banners which belong to a Banner Group, and then the software will automatically rotate through the banners in the Banner Group. 
 
-- Automatically Publish New Banners At A Specified Time -
+**Automatically Publish New Banners At A Specified Time**
+
 Do you have a banner that's announcing a new special, but you want to hide it until the right time? No problem - with the Publish Time feature of Custom Banners you can setup your banner now, but not show it until the right time.
 
 == Installation ==
@@ -44,7 +48,7 @@ Do you have a banner that's announcing a new special, but you want to hide it un
 2. Upload the contents of '/custom-banners/' to the '/wp-content/plugins/' directory
 3. Activate Custom Banners through the 'Plugins' menu in WordPress
 
-This section describes how to use the plugin on your website.
+**This section describes how to use the plugin on your website.**
 
 = Adding a New Banner =
 
@@ -111,13 +115,25 @@ On the Options screen, check the box next to "Link Entire Banner".
 
 Alright - all you need to do is go to Settings -> Permalinks and click the Save button.  This should take care of the issue!
 
+= Help!  My banners are being cut off on the left / right / top / bottom!
+
+No worries!  This probably means the image you are using doesn't match the size of the area it is being displayed in.  Try resizing and cropping your image to fit the available area, and then upload it again!
+
 == Screenshots ==
 
 1. This is the Add New Banner Page.
 2. This is the List of Banners - from here you can Edit or Delete a Banner.
 3. This is the List of Banner Groups - from here you can Create, Edit, or Delete a Banner Group.
+4. This is the Single Banner Widget.  You can use this widget to output and control a single banner anywhere you have a widget region on your website.
+5. This is the Rotating Banner Widget.  You can use this widget to output and control a rotating banner anywhere you have a widget region on your website.
 
 == Changelog ==
+
+= 1.2.3 =
+* Update compatibility to 3.9.2.
+* Add Rotating Banner Widget to Pro feature set.
+* Add Single Banner Widget to regular feature set.
+* Minor subscribe form update.
 
 = 1.2.2.3 =
 * Minor registration update.
@@ -149,4 +165,4 @@ Alright - all you need to do is go to Settings -> Permalinks and click the Save 
 
 == Upgrade Notice ==
 
-* 1.2.2.3: Minor Update available!
+* 1.2.3: Update available!

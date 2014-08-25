@@ -156,13 +156,13 @@ class customBannersOptions
 				<div id="mc_embed_signup">
 					<form action="http://illuminatikarate.us2.list-manage.com/subscribe/post?u=403e206455845b3b4bd0c08dc&amp;id=27d2c9ee87" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
 						<p class="special-offer">Special Offer:</p>
-						<h3>Sign-up for our mailing list now, and we'll give you a discount on Custom Banners Pro!</h3>
+						<h3>Subscribe to our newsletter now, and we'll give you a discount on Custom Banners Pro!</h3>
 						<label for="mce-EMAIL">Your Email:</label>
 						<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
 						<!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
 						<div style="position: absolute; left: -5000px;"><input type="text" name="b_403e206455845b3b4bd0c08dc_6ad78db648" tabindex="-1" value=""></div>
 						<div class="clear"><input type="submit" value="Subscribe Now" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
-						<p class="explain"><strong>What To Expect:</strong> You'll receive you around one email from us each month, jam-packed with special offers and tips for getting the most out of WordPress. Of course, you can unsubscribe at any time.</p>
+						<p class="explain"><strong>What To Expect:</strong> <br/> As soon as you've confirmed your subscription, you'll receive a coupon code for a big discount on Custom Banners Pro. After that, you'll receive about one email from us each month, jam-packed with special offers and tips for getting the most out of WordPress. Of course, you can unsubscribe at any time.</p>
 					</form>
 				</div>
 				<p class="u_to_p"><a href="http://goldplugins.com/our-plugins/custom-banners/">Upgrade to Custom Banners Pro now</a> to remove banners like this one.</p>
