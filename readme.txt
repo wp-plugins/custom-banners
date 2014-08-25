@@ -115,7 +115,7 @@ On the Options screen, check the box next to "Link Entire Banner".
 
 Alright - all you need to do is go to Settings -> Permalinks and click the Save button.  This should take care of the issue!
 
-= Help!  My banners are being cut off on the left / right / top / bottom!
+= Help!  My banners are being cut off on the left / right / top / bottom! =
 
 No worries!  This probably means the image you are using doesn't match the size of the area it is being displayed in.  Try resizing and cropping your image to fit the available area, and then upload it again!
 
