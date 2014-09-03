@@ -3,7 +3,7 @@ Contributors: ghuger, richardgabriel
 Tags: banners, ads, rotating banners, custom banners, custom ads, custom rotating banners, random banners, random rotating banners
 Requires at least: 3.8
 Tested up to: 3.9.2
-Stable tag: 1.2.3
+Stable tag: 1.2.3.1
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -129,6 +129,9 @@ No worries!  This probably means the image you are using doesn't match the size 
 
 == Changelog ==
 
+= 1.2.3.1 =
+* Address 404 error with jquery.cycle2.js.map file in Google Chrome.
+
 = 1.2.3 =
 * Update compatibility to 3.9.2.
 * Add Rotating Banner Widget to Pro feature set.
@@ -165,4 +168,4 @@ No worries!  This probably means the image you are using doesn't match the size 
 
 == Upgrade Notice ==
 
-* 1.2.3: Update available!
+* 1.2.3.1: Update available!
