@@ -2,8 +2,8 @@
 Contributors: ghuger, richardgabriel
 Tags: banners, ads, rotating banners, custom banners, custom ads, custom rotating banners, random banners, random rotating banners
 Requires at least: 3.8
-Tested up to: 3.9.2
-Stable tag: 1.2.3.1
+Tested up to: 4.0
+Stable tag: 1.3
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -100,6 +100,7 @@ You have a few things to pay attention to:
 - To output Random Banners from a Specific Group, place the shortcode [banner group='test' count='3' transition='scrollHorz' timer='2000'] in the desired area of the Page or Post Content.  Change the value of count from 3 to however many slides you want to use.  For transition, use either 'scrollHorz' or 'fadeIn'.  For timer, use 1000 times the number of seconds you want between transitions (ie, for 4 seconds input 4000.)
 - To output Random Banners, place the shortcode [banner count='3' transition='scrollHorz' timer='2000'] in the desired area of the Page or Post Content.  Change the value of count from 3 to however many slides you want to use.  For transition, use either 'scrollHorz' or 'fadeIn'.  For timer, use 1000 times the number of seconds you want between transitions (ie, for 4 seconds input 4000.)
 - Supported transitions are "scrollVert","scrollHorz","fadeIn","fadeOut","flipHorz","flipVert", and "tileSlide".
+- To Show Pager Icons below your Banner, use the attribute pager='true' or pager='1'.  On the Widget, check the box next to Show Pager Icons.
 
 == Frequently Asked Questions ==
 
@@ -128,6 +129,11 @@ No worries!  This probably means the image you are using doesn't match the size 
 5. This is the Rotating Banner Widget.  You can use this widget to output and control a rotating banner anywhere you have a widget region on your website.
 
 == Changelog ==
+
+= 1.3 =
+* Feature: Add Support for Cycle2 Pagers.
+* Fix: Address issue where Custom CSS wasn't being output.
+* Update: compatible with WordPress 4.0.
 
 = 1.2.3.1 =
 * Address 404 error with jquery.cycle2.js.map file in Google Chrome.
@@ -168,4 +174,4 @@ No worries!  This probably means the image you are using doesn't match the size 
 
 == Upgrade Notice ==
 
-* 1.2.3.1: Update available!
+* 1.3: Update available!

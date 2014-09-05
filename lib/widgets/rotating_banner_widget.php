@@ -26,13 +26,14 @@ class rotatingBannerWidget extends WP_Widget
 	}
 
 	function form($instance){
-		$instance = wp_parse_args( (array) $instance, array( 'title' => '', 'num_banners' => null, 'timer' => '4000', 'caption_position' => 'bottom', 'use_image_tag' => false, 'transition' => 'none', 'group' => '') );
+		$instance = wp_parse_args( (array) $instance, array( 'title' => '', 'num_banners' => null, 'timer' => '4000', 'caption_position' => 'bottom', 'use_image_tag' => false, 'transition' => 'none', 'group' => '', 'show_pager_icons' => false) );
 		$title = $instance['title'];
 		$num_banners = $instance['num_banners'];
 		$transition = $instance['transition'];
 		$group = $instance['group'];
 		$caption_position = $instance['caption_position'];
 		$use_image_tag = $instance['use_image_tag'];
+		$show_pager_icons = $instance['show_pager_icons'];
 		$timer = $instance['timer'];
 		
 		if(!isValidCBKey()){
@@ -89,6 +90,8 @@ class rotatingBannerWidget extends WP_Widget
 			</select></p>
 			
 			<p><label for="<?php echo $this->get_field_id('use_image_tag'); ?>">Use Image Tag Instead of Background Image: </label><input <?php if(!isValidCBKey()):?> disabled="DISABLED" <?php endif;?> class="widefat" id="<?php echo $this->get_field_id('use_image_tag'); ?>" name="<?php echo $this->get_field_name('use_image_tag'); ?>" type="checkbox" value="1" <?php if($use_image_tag){ ?>checked="CHECKED"<?php } ?>/></p>
+			
+			<p><label for="<?php echo $this->get_field_id('show_pager_icons'); ?>">Show Pager Icons: </label><input <?php if(!isValidCBKey()):?> disabled="DISABLED" <?php endif;?> class="widefat" id="<?php echo $this->get_field_id('show_pager_icons'); ?>" name="<?php echo $this->get_field_name('show_pager_icons'); ?>" type="checkbox" value="1" <?php if($show_pager_icons){ ?>checked="CHECKED"<?php } ?>/></p>
 		<?php
 	}
 
@@ -98,6 +101,7 @@ class rotatingBannerWidget extends WP_Widget
 		$instance['num_banners'] = $new_instance['num_banners'];
 		$instance['caption_position'] = $new_instance['caption_position'];
 		$instance['use_image_tag'] = $new_instance['use_image_tag'];
+		$instance['show_pager_icons'] = $new_instance['show_pager_icons'];
 		$instance['transition'] = $new_instance['transition'];
 		$instance['group'] = $new_instance['group'];
 		$instance['timer'] = $new_instance['timer'];
@@ -116,7 +120,8 @@ class rotatingBannerWidget extends WP_Widget
 							'count' => 1,
 							'timer' => 4000,
 							'use_image_tag' => false,
-							'hide' => false);
+							'hide' => false,
+							'show_pager_icons' => false);
 			
 			extract($args, EXTR_SKIP);
 
@@ -125,6 +130,7 @@ class rotatingBannerWidget extends WP_Widget
 			$title = empty($instance['title']) ? ' ' : apply_filters('widget_title', $instance['title']);
 			$atts['caption_position'] = empty($instance['caption_position']) ? null : $instance['caption_position'];
 			$atts['use_image_tag'] = empty($instance['use_image_tag']) ? null : $instance['use_image_tag'];
+			$atts['show_pager_icons'] = empty($instance['show_pager_icons']) ? null : $instance['show_pager_icons'];
 			$atts['count'] = empty($instance['num_banners']) ? '1' : $instance['num_banners'];
 			$atts['transition'] = empty($instance['transition']) ? '1' : $instance['transition'];
 			$atts['group'] = empty($instance['group']) ? '' : $instance['group'];

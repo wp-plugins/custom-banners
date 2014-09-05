@@ -4,7 +4,7 @@ Plugin Name: Custom Banners
 Plugin Script: custom-banners.php
 Plugin URI: http://goldplugins.com/our-plugins/custom-banners/
 Description: Allows you to create custom banners, which consist of an image, text, a link, and a call to action.  Custom banners are easily output via shortcodes. Each visitor to the website is then shown a random custom banner.
-Version: 1.2.3.1
+Version: 1.3
 Author: GoldPlugins
 Author URI: http://goldplugins.com/
 
@@ -35,7 +35,16 @@ class CustomBannersPlugin extends GoldPlugin
 			
 		$custom_banners_options = new customBannersOptions();
 		
+		//add Custom CSS
+		add_action( 'wp_head', array($this, 'cb_setup_custom_css'));
+		
 		parent::__construct();
+	}
+
+	//add Custom CSS
+	function cb_setup_custom_css() 
+	{
+		echo '<style type="text/css" media="screen">' . get_option('custom_banners_custom_css') . "</style>";
 	}
 	
 	function add_hooks()
@@ -85,9 +94,11 @@ class CustomBannersPlugin extends GoldPlugin
 							'group' => '',
 							'caption_position' => 'bottom',
 							'transition' => 'none',
+							'pager' => false,
 							'count' => 1,
 							'timer' => 4000,
 							'use_image_tag' => false,
+							'show_pager_icons' => false,
 							'hide' => false);
 							
 		$atts = shortcode_atts($defaults, $atts);
@@ -100,7 +111,7 @@ class CustomBannersPlugin extends GoldPlugin
 			$banners = get_posts(array('posts_per_page' => $atts['count'], 'orderby' => 'rand', 'post_type'=> 'banner', 'banner_groups' => $atts['group']));
 		
 			if(isValidCBKey() && (in_array($atts['transition'], array('fadeIn','fadeOut','scrollHorz','scrollVert','shuffle','carousel','flipHorz','flipVert','tileSlide')))){
-				$html .= '<div class="cycle-slideshow" data-cycle-fx="' . $atts['transition'] . '" data-cycle-timeout="' . $atts['timer'] . '" data-cycle-slides="> div" >';
+				$html .= '<div class="cycle-slideshow" data-cycle-fx="' . $atts['transition'] . '" data-cycle-timeout="' . $atts['timer'] . '" data-cycle-slides="> div.banner_wrapper" >';
 			}
 		
 			$first = true;
@@ -119,6 +130,11 @@ class CustomBannersPlugin extends GoldPlugin
 			}
 			
 			if(isValidCBKey() && (in_array($atts['transition'], array('fadeIn','fadeOut','scrollHorz','scrollVert','shuffle','carousel','flipHorz','flipVert','tileSlide')))){
+				//add pager to bottom of slideshow, if option set
+				if($atts['pager'] || $atts['show_pager_icons'] ){
+					$html .= '<div class="cycle-pager"></div>';
+				}
+				
 				$html .= '</div><!-- end slideshow -->';
 			}
 		} else {
