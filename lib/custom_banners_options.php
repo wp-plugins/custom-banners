@@ -18,6 +18,8 @@ along with The Custom Banners.  If not, see <http://www.gnu.org/licenses/>.
 
 class customBannersOptions
 {
+	var $textdomain = '';
+	
 	function __construct(){
 		//may be running in non WP mode (for example from a notification)
 		if(function_exists('add_action')){
@@ -29,9 +31,12 @@ class customBannersOptions
 	function add_admin_menu_item(){
 		$title = "Custom Banners Settings";
 		$page_title = "Custom Banners Settings";
+		$top_level_slug = "custom-banners-settings";
 		
 		//create new top-level menu
-		add_menu_page($page_title, $title, 'administrator', __FILE__, array($this, 'settings_page'));
+		add_menu_page($page_title, $title, 'administrator', $top_level_slug, array($this, 'basic_settings_page'));
+		add_submenu_page($top_level_slug , 'Basic Options', 'Basic Options', 'administrator', $top_level_slug, array($this, 'basic_settings_page'));
+		add_submenu_page($top_level_slug , 'Help & Instructions', 'Help & Instructions', 'administrator', 'custom-banners-help', array($this, 'help_settings_page'));
 
 		//call register settings function
 		add_action( 'admin_init', array($this, 'register_settings'));	
@@ -47,10 +52,24 @@ class customBannersOptions
 		register_setting( 'custom-banners-settings-group', 'custom_banners_registered_url' );
 		register_setting( 'custom-banners-settings-group', 'custom_banners_registered_key' );
 	}
+	
+	//function to produce tabs on admin screen
+	function admin_tabs($current = 'homepage' ) {	
+		$tabs = array( 'custom-banners-settings' => __('Basic Options', $this->textdomain), 'custom-banners-help' => __('Help & Instructions', $this->textdomain));
+		echo '<div id="icon-themes" class="icon32"><br></div>';
+		echo '<h2 class="nav-tab-wrapper">';
+			foreach( $tabs as $tab => $name ){
+				$class = ( $tab == $current ) ? ' nav-tab-active' : '';
+				echo "<a class='nav-tab$class' href='?page=$tab'>$name</a>";
+			}
+		echo '</h2>';
+	}
 
-	function settings_page(){
+	function settings_page_top(){
 		$title = "Custom Banners Settings";
 		$message = "Custom Banners Settings Updated.";
+		
+		global $pagenow;
 	?>
 	<div class="wrap">
 		<h2><?php echo $title; ?></h2>
@@ -172,9 +191,23 @@ class customBannersOptions
 		
 		<?php if (isset($_GET['settings-updated']) && $_GET['settings-updated'] == 'true') : ?>
 		<div id="message" class="updated fade"><p><?php echo $message; ?></p></div>
-		<?php endif; ?>	
+		<?php endif;
 		
-		<form method="post" action="options.php">
+		$this->get_and_output_current_tab($pagenow);
+	}
+	
+	function get_and_output_current_tab($pagenow){
+		$tab = $_GET['page'];
+		
+		$this->admin_tabs($tab); 
+				
+		return $tab;
+	}
+	
+	function basic_settings_page(){	
+		$this->settings_page_top();
+		
+		?><form method="post" action="options.php">
 			<?php settings_fields( 'custom-banners-settings-group' ); ?>			
 			
 			<h3>Basic Options</h3>
@@ -204,8 +237,12 @@ class customBannersOptions
 				<input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
 			</p>
 		</form>
-	</div>
-	<?php } // end settings_page function
+		</div><?php 
+	} // end basic_settings_page function	
 	
+	function help_settings_page(){
+		$this->settings_page_top();
+		include('pages/help.html');
+	}	
 } // end class
 ?>
