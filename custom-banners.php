@@ -4,7 +4,7 @@ Plugin Name: Custom Banners
 Plugin Script: custom-banners.php
 Plugin URI: http://goldplugins.com/our-plugins/custom-banners/
 Description: Allows you to create custom banners, which consist of an image, text, a link, and a call to action.  Custom banners are easily output via shortcodes. Each visitor to the website is then shown a random custom banner.
-Version: 1.3.1
+Version: 1.3.2
 Author: GoldPlugins
 Author URI: http://goldplugins.com/
 
@@ -216,15 +216,19 @@ class CustomBannersPlugin extends GoldPlugin
 					$html .= '<a class="custom_banners_big_link" href="' . $target_url . '"></a>';
 				}
 				$html .= $img_html;
-				$html .= '<div class="banner_caption">';
-					$html .= $banner->post_content;
-					if (strlen($cta) > 0)
-					{				
-						$html .= '<div class="banner_call_to_action">';
-							$html .= '<a href="' . $target_url . '" class="banner_btn_cta">' . htmlspecialchars($cta) . '</a>';
-						$html .= '</div>'; //<!--.banner_call_to_action-->
-					}
-				$html .= '</div>'; //<!--.banner_caption-->
+				$caption = $banner->post_content;
+				if (strlen($caption) > 0 || strlen($cta) > 0)
+				{
+					$html .= '<div class="banner_caption">';
+						$html .= $caption;
+						if (strlen($cta) > 0)
+						{				
+							$html .= '<div class="banner_call_to_action">';
+								$html .= '<a href="' . $target_url . '" class="banner_btn_cta">' . htmlspecialchars($cta) . '</a>';
+							$html .= '</div>'; //<!--.banner_call_to_action-->
+						}
+					$html .= '</div>'; //<!--.banner_caption-->
+				}
 			$html .= '</div>'; //<!--.banner -->
 		$html .= '</div>'; //<!--.banner_wrapper-->
 		

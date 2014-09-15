@@ -15,7 +15,7 @@
 }
 
 .banner_wrapper .banner .banner_caption {
-	background-color: rgba(0, 0, 0, 0.7);
+	background-image: url(../img/black_70.png);
 	color: #FFFFFF;
 	padding: 20px;
 	position: absolute;
