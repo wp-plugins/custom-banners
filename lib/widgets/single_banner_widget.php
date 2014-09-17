@@ -34,7 +34,8 @@ class singleBannerWidget extends WP_Widget
 		?>
 			<p><label for="<?php echo $this->get_field_id('title'); ?>">Widget Title:</label><input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr($title); ?>" /></p>
 			<?php
-				$banners = get_posts('post_type=banner');
+				$args = array( 'post_type' => 'banner', 'posts_per_page' => -1);
+				$banners = get_posts($args);
 			?>
 				<p><label for="<?php echo $this->get_field_id('bannerid'); ?>">Banner to Display: </label>
 				<select id="<?php echo $this->get_field_id('bannerid'); ?>" name="<?php echo $this->get_field_name('bannerid'); ?>">
