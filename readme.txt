@@ -2,8 +2,8 @@
 Contributors: ghuger, richardgabriel
 Tags: banners, ads, rotating banners, custom banners, custom ads, custom rotating banners, random banners, random rotating banners
 Requires at least: 3.8
-Tested up to: 4.0
-Stable tag: 1.3.3
+Tested up to: 4.1.1
+Stable tag: 1.3.4
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -130,6 +130,9 @@ No worries!  This probably means the image you are using doesn't match the size 
 
 == Changelog ==
 
+= 1.3.4 =
+* Update compatibility to WP 4.1.1.
+
 = 1.3.3 =
 * Show more than 5 banners in single banner widget banner select drop down menu.
 
@@ -185,4 +188,4 @@ No worries!  This probably means the image you are using doesn't match the size 
 
 == Upgrade Notice ==
 
-* 1.3.3: Update available!
+* 1.3.4: Update available!
