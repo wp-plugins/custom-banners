@@ -12,6 +12,12 @@ Custom Banners provides a simple interface to upload several banners and show a 
 == Description ==
 Custom Banners is a WordPress plugin that allows you to easily manage several banners (ads) and display them on the front end.
 
+= Upgrade to Pro for For Advanced Features and Support =
+
+The GoldPlugins team does not provide direct support for the Custom Banners plugin on the WordPress.org forums. One on one email support is available to people who have purchased Custom Banners Pro only. Custom Banners adds the ability to create slideshows from your banners, and it supports all kind of cool transitions. You should [upgrade today!](http://goldplugins.com/our-plugins/custom-banners/upgrade-to-custom-banners-pro/?utm_source=wp&utm_campaign=desc_upgrade1 "Upgrade to Custom Banners Pro")
+
+[Upgrade To Custom Banners Pro](http://goldplugins.com/our-plugins/custom-banners/upgrade-to-custom-banners-pro/?utm_source=wp&utm_campaign=desc_upgrade2)
+
 **Create Banners Once, and Reuse Them Throughout Your Website**
 
 Use custom banners to create resuable banners that your whole team can use! Setup the banners once, and you'll be able to re-use them throughout the website. Best of all, if you need to make an update you can just make it once.
@@ -131,7 +137,7 @@ No worries!  This probably means the image you are using doesn't match the size 
 == Changelog ==
 
 = 1.3.4 =
-* Update compatibility to WP 4.1.1.
+* Update compatibility with WordPress 4.1.1
 
 = 1.3.3 =
 * Show more than 5 banners in single banner widget banner select drop down menu.
@@ -188,4 +194,4 @@ No worries!  This probably means the image you are using doesn't match the size 
 
 == Upgrade Notice ==
 
-* 1.3.4: Update available!
+* 1.3.4: Update compatibility to WP 4.1.1.
