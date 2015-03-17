@@ -4,7 +4,7 @@ Plugin Name: Custom Banners
 Plugin Script: custom-banners.php
 Plugin URI: http://goldplugins.com/our-plugins/custom-banners/
 Description: Allows you to create custom banners, which consist of an image, text, a link, and a call to action.  Custom banners are easily output via shortcodes. Each visitor to the website is then shown a random custom banner.
-Version: 1.3.4
+Version: 1.4
 Author: GoldPlugins
 Author URI: http://goldplugins.com/
 
@@ -36,7 +36,15 @@ class CustomBannersPlugin extends GoldPlugin
 		$custom_banners_options = new customBannersOptions();
 		
 		//add Custom CSS
-		add_action( 'wp_head', array($this, 'cb_setup_custom_css'));
+		add_action( 'wp_head', array($this, 'cb_setup_custom_css'));		
+
+		//add our custom links for Settings and Support to various places on the Plugins page
+		$plugin = plugin_basename(__FILE__);
+		add_filter( "plugin_action_links_{$plugin}", array($this, 'add_settings_link_to_plugin_action_links') );
+		add_filter( 'plugin_row_meta', array($this, 'add_custom_links_to_plugin_description'), 10, 2 );	
+		
+		//add single shortcode metabox to banner add/edit screen
+		add_action( 'admin_menu', array($this,'add_meta_boxes')); // add our custom meta boxes
 		
 		parent::__construct();
 	}
@@ -157,6 +165,7 @@ class CustomBannersPlugin extends GoldPlugin
 		$target_url = $this->get_option_value($banner_id, 'target_url', '#');
 		$css_class = $this->get_option_value($banner_id, 'css_class', '');	
 		$use_big_link = get_option('custom_banners_use_big_link');
+		$open_in_window = get_option('custom_banners_open_link_in_new_window', 0);
 		
 		// placeholder variables
 		$html = '';
@@ -209,11 +218,17 @@ class CustomBannersPlugin extends GoldPlugin
 			$banner_display = '';
 		}
 		
+		if($open_in_window){
+			$link_target = ' target="_blank" ';
+		} else {
+			$link_target = '';
+		}
+		
 		// generate the html now
 		$html .= '<div class="banner_wrapper" '. $banner_display .'>';
 			$html .= '<div class="banner ' . $extra_classes_str . '" style="' . $banner_style . '">';
 				if($use_big_link){
-					$html .= '<a class="custom_banners_big_link" href="' . $target_url . '"></a>';
+					$html .= '<a class="custom_banners_big_link" ' . $link_target . ' href="' . $target_url . '"></a>';
 				}
 				$html .= $img_html;
 				$caption = $banner->post_content;
@@ -224,7 +239,7 @@ class CustomBannersPlugin extends GoldPlugin
 						if (strlen($cta) > 0)
 						{				
 							$html .= '<div class="banner_call_to_action">';
-								$html .= '<a href="' . $target_url . '" class="banner_btn_cta">' . htmlspecialchars($cta) . '</a>';
+								$html .= '<a href="' . $target_url . '" ' . $link_target . ' class="banner_btn_cta">' . htmlspecialchars($cta) . '</a>';
 							$html .= '</div>'; //<!--.banner_call_to_action-->
 						}
 					$html .= '</div>'; //<!--.banner_caption-->
@@ -250,7 +265,7 @@ class CustomBannersPlugin extends GoldPlugin
 			$jsUrl = plugins_url( 'assets/js/wp-banners.js' , __FILE__ );
 			$this->add_script('wp-banners-js',  $jsUrl, array( 'jquery' ),
 			false,
-			true);		
+			true);			
 		}
 	}
  
@@ -292,6 +307,46 @@ class CustomBannersPlugin extends GoldPlugin
 		
 		register_widget( 'singleBannerWidget' );
 		register_widget( 'rotatingBannerWidget' );
+	}
+	
+	//add an inline link to the settings page, before the "deactivate" link
+	function add_settings_link_to_plugin_action_links($links) { 
+	  $settings_link = '<a href="admin.php?page=custom-banners-settings">Settings</a>';
+	  array_unshift($links, $settings_link); 
+	  return $links; 
+	}
+
+	// add inline links to our plugin's description area on the Plugins page
+	function add_custom_links_to_plugin_description($links, $file) { 
+
+		/** Get the plugin file name for reference */
+		$plugin_file = plugin_basename( __FILE__ );
+	 
+		/** Check if $plugin_file matches the passed $file name */
+		if ( $file == $plugin_file )
+		{		
+			$new_links['settings_link'] = '<a href="admin.php?page=custom-banners-settings">Settings</a>';
+			$new_links['support_link'] = '<a href="http://goldplugins.com/contact/?utm-source=plugin_menu&utm_campaign=support" target="_blank">Get Support</a>';
+				
+			if(!isValidCBKey()){
+				$new_links['upgrade_to_pro'] = '<a href="http://goldplugins.com/our-plugins/custom-banners/upgrade-to-custom-banners-pro/?utm_source=plugin_menu&utm_campaign=upgrade" target="_blank">Upgrade to Pro</a>';
+			}
+			
+			$links = array_merge( $links, $new_links);
+		}
+		return $links; 
+	}
+	
+		
+	/* Displays a meta box with the shortcodes to display the current banner */
+	function display_shortcodes_meta_box() {
+		global $post;
+		echo "Add this shortcode to any page where you'd like to <strong>display</strong> this Banner:<br />";
+		echo '<pre>[banner id="' . $post->ID . '"]</pre>';
+	}
+
+	function add_meta_boxes(){
+		add_meta_box( 'banner_shortcodes', 'Shortcodes', array($this, 'display_shortcodes_meta_box'), 'banner', 'side', 'default' );
 	}
 }
 $ebp = new CustomBannersPlugin();
