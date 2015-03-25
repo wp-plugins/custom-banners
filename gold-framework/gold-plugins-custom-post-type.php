@@ -202,6 +202,11 @@ class GoldPlugins_CustomPostType
 			}
 		}
 	}
+	
+	function get_metabox_id()
+	{
+		return 'my-custom-fields'.md5(serialize($this->customFields));
+	}
 
 	function __construct($postType, $customFields = false, $removeDefaultCustomFields = false)
 	{

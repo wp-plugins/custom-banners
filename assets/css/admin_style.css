@@ -491,3 +491,17 @@
 	margin-left: 15px;
 	max-width: 85%;
 }
+
+.post-type-banner #postimagediv .attachment-full {
+	max-width: 100%;
+	max-height: 400px;
+	height: auto;
+	width: auto;
+}
+.post-type-banner .wp-editor-container {
+	background-color:#fff;
+	margin-bottom: 20px;
+}
+.post-type-banner #wp-content-wrap #wp-content-editor-tools {
+	background-color:#fff;
+}

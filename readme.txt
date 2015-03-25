@@ -3,7 +3,7 @@ Contributors: ghuger, richardgabriel
 Tags: banners, ads, rotating banners, custom banners, custom ads, custom rotating banners, random banners, random rotating banners
 Requires at least: 3.8
 Tested up to: 4.1.1
-Stable tag: 1.4
+Stable tag: 1.4.1
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -136,6 +136,9 @@ No worries!  This probably means the image you are using doesn't match the size 
 
 == Changelog ==
 
+= 1.4.1 =
+* Repositions metaboxes, including Featured Image and Editor, into more usable positions
+
 = 1.4 =
 * Updates Admin interface; adds Settings links to Plugin List.
 * Adds new option, Open Link in New Window, to allow the Banner CTA / Link to open in a new window when clicked.
@@ -199,4 +202,4 @@ No worries!  This probably means the image you are using doesn't match the size 
 
 == Upgrade Notice ==
 
-* 1.4: Adds Option to Open Link in a New Window, Interface Updates
+* 1.4.1: Usability updates to the Add/Edit Banner screen

@@ -4,7 +4,7 @@ Plugin Name: Custom Banners
 Plugin Script: custom-banners.php
 Plugin URI: http://goldplugins.com/our-plugins/custom-banners/
 Description: Allows you to create custom banners, which consist of an image, text, a link, and a call to action.  Custom banners are easily output via shortcodes. Each visitor to the website is then shown a random custom banner.
-Version: 1.4
+Version: 1.4.1
 Author: GoldPlugins
 Author URI: http://goldplugins.com/
 
@@ -68,7 +68,7 @@ class CustomBannersPlugin extends GoldPlugin
 		$customFields[] = array('name' => 'cta_text', 'title' => 'Call To Action Text', 'description' => 'The "Call To Action" (text) of the button. Leave this field blank to hide the call to action button.', 'type' => 'text');
 		$customFields[] = array('name' => 'css_class', 'title' => 'CSS Class', 'description' => 'Any extra CSS classes that you would like applied to this banner.', 'type' => 'text');
 		$this->add_custom_post_type($postType, $customFields);
-		
+
 		//load list of current posts that have featured images	
 		$supportedTypes = get_theme_support( 'post-thumbnails' );
 		
@@ -83,6 +83,95 @@ class CustomBannersPlugin extends GoldPlugin
 			add_theme_support( 'post-thumbnails', $supportedTypes[0] );
 			//for the banner images
 		}
+	
+		//move featured image box to main column
+		add_action('add_meta_boxes', array($this,'custom_banner_edit_screen'));		
+		
+		//remove unused meta boxes
+		add_action( 'admin_init', array($this,'custom_banners_unused_meta'));
+
+		// move the post editor under the other metaboxes
+		add_action( 'add_meta_boxes', array($this, 'reposition_editor_metabox'), 0 );
+		
+		// enforce correct order of metaboxes
+		add_action('admin_init', array($this, 'set_metabox_order'));
+	}
+	
+	function reposition_editor_metabox() {
+		global $_wp_post_type_features;
+		if (isset($_wp_post_type_features['banner']['editor']) && $_wp_post_type_features['banner']['editor']) {
+			unset($_wp_post_type_features['banner']['editor']);
+			add_meta_box(
+			'banner_caption',
+			__('Banner Caption'),
+			array($this, 'output_banner_caption_metabox'),
+			'banner', 'normal', 'low'
+			);
+		}
+	}
+	
+	function output_banner_caption_metabox( $post ) {
+		echo '<div class="wp-editor-wrap">';
+		wp_editor($post->post_content, 'content', array('dfw' => true, 'tabindex' => 1) );
+		echo '</div>';
+	}	
+	
+	function set_metabox_order() {
+		global $wpdb, $user_ID, $posts_widgets_order_hash;
+		
+		// check to see if its already set correctly
+		$check_val = get_user_option('_custom_banners_meta_box_order', $user_ID);
+		$correct_val = "metaboxes_v1";
+		
+		// if the metabox order is incorrect or not set, reset it now
+		if ($check_val !== $correct_val)
+		{
+			$metabox_order = get_user_option('meta-box-order_banner', $user_ID);
+			if (empty($metabox_order)) {
+				$metabox_order = array();
+			}
+			$banner_info_metabox_id = $this->customPostTypes['banners']->get_metabox_id();
+			$metabox_order['normal'] = 'postimagediv,banner_caption,'.$banner_info_metabox_id.'';
+			update_user_option($user_ID, 'meta-box-order_banner', $metabox_order, true);
+			update_user_option($user_ID, '_custom_banners_meta_box_order', $correct_val, true);
+		}
+	}
+	
+	//remove unused meta boxes
+	function custom_banners_unused_meta() {
+		remove_post_type_support( 'banner', 'excerpt' );
+		remove_post_type_support( 'banner', 'custom-fields' );
+		remove_post_type_support( 'banner', 'comments' );
+		remove_post_type_support( 'banner', 'author' );
+	}
+
+	//remove featured image from the sidebar and add it to the main column
+	function custom_banner_edit_screen() {
+		// remove the Featured Image metabox, and replace it with our own (slightly modified) version, now residing in the main column
+		remove_meta_box( 'postimagediv', 'banner', 'side' );
+		add_meta_box('postimagediv', __('Banner Image'), array($this, 'custom_banners_post_thumbnail_html'), 'banner', 'normal', 'high');
+	}
+	
+	//custom banner image html callback
+	function custom_banners_post_thumbnail_html( $post ) {
+		$thumbnail_id = get_post_meta( $post->ID, '_thumbnail_id', true );
+
+        $upload_iframe_src = esc_url( get_upload_iframe_src('image', $post->ID ) );
+        $set_thumbnail_link = '<p class="hide-if-no-js"><a title="' . esc_attr__( 'Set featured image' ) . '" href="%s" id="set-post-thumbnail" class="thickbox">%s</a></p>';
+        $content = sprintf( $set_thumbnail_link, $upload_iframe_src, esc_html__( 'Set featured image' ) );
+
+        if ( $thumbnail_id && get_post( $thumbnail_id ) ) {
+                $thumbnail_html = wp_get_attachment_image( $thumbnail_id, "full" );
+						
+                if ( !empty( $thumbnail_html ) ) {
+                        $ajax_nonce = wp_create_nonce( 'set_post_thumbnail-' . $post->ID );
+                        $content = sprintf( $set_thumbnail_link, $upload_iframe_src, $thumbnail_html );
+                        $content .= '<p class="hide-if-no-js"><a href="#" id="remove-post-thumbnail" onclick="WPRemoveThumbnail(\'' . $ajax_nonce . '\');return false;">' . esc_html__( 'Remove featured image' ) . '</a></p>';
+                }           
+        }
+		
+		// output the finalized HTML
+        echo apply_filters( 'admin_post_thumbnail_html', $content, $post->ID );
 	}
 	
 	function register_taxonomies()

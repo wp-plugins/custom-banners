@@ -29,7 +29,13 @@ if(!class_exists("GoldPlugin")):
 		
 		public function add_custom_post_type($postType, $customFields)
 		{
-			$this->customPostTypes[] = new GoldPlugins_CustomPostType($postType, $customFields);
+			if(isset($postType['slug'])) {
+				$slug = $postType['slug'];
+			}
+			else {
+				$slug = 'post-type-' . (count($this->customPostTypes) + 1);
+			}
+			$this->customPostTypes[$slug] = new GoldPlugins_CustomPostType($postType, $customFields);
 		}
 
 		/* this is the function to call from other code, which creates *a single* taxonomy to be registered */
