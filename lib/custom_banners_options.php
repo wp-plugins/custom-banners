@@ -28,16 +28,19 @@ class customBannersOptions
 			add_action( 'admin_init', array( $this, 'admin_scripts' ) );
 			add_action( 'admin_head', array($this, 'admin_css') );
 		}
+		$this->shed = new GoldPlugins_BikeShed();
 	}
 	
 	function add_admin_menu_item(){
 		$title = "Custom Banners Settings";
 		$page_title = "Custom Banners Settings";
 		$top_level_slug = "custom-banners-settings";
+		$style_menu_label = isValidCBKey() ? __('Style Options', $this->textdomain) : __('Style Options (Pro)', $this->textdomain);
 		
 		//create new top-level menu
 		add_menu_page($page_title, $title, 'administrator', $top_level_slug, array($this, 'basic_settings_page'));
 		add_submenu_page($top_level_slug , 'Basic Options', 'Basic Options', 'administrator', $top_level_slug, array($this, 'basic_settings_page'));
+		add_submenu_page($top_level_slug , 'Style Options', $style_menu_label, 'administrator', 'custom-banners-style-settings', array($this, 'style_settings_page'));
 		add_submenu_page($top_level_slug , 'Help & Instructions', 'Help & Instructions', 'administrator', 'custom-banners-help', array($this, 'help_settings_page'));
 
 		//call register settings function
@@ -50,15 +53,37 @@ class customBannersOptions
 		register_setting( 'custom-banners-settings-group', 'custom_banners_custom_css' );
 		register_setting( 'custom-banners-settings-group', 'custom_banners_use_big_link' );
 		register_setting( 'custom-banners-settings-group', 'custom_banners_open_link_in_new_window' );
+		register_setting( 'custom-banners-settings-group', 'custom_banners_never_show_captions' );
+		register_setting( 'custom-banners-settings-group', 'custom_banners_never_show_cta_buttons' );
+		register_setting( 'custom-banners-settings-group', 'custom_banners_default_width' );
+		register_setting( 'custom-banners-settings-group', 'custom_banners_default_height' );
 		
 		register_setting( 'custom-banners-settings-group', 'custom_banners_registered_name' );
 		register_setting( 'custom-banners-settings-group', 'custom_banners_registered_url' );
 		register_setting( 'custom-banners-settings-group', 'custom_banners_registered_key' );
+
+		register_setting( 'custom-banners-style-settings-group', 'custom_banners_caption_background_color' );
+		register_setting( 'custom-banners-style-settings-group', 'custom_banners_caption_background_opacity' );
+		register_setting( 'custom-banners-style-settings-group', 'custom_banners_cta_background_color' );
+		register_setting( 'custom-banners-style-settings-group', 'custom_banners_cta_border_color' );
+		register_setting( 'custom-banners-style-settings-group', 'custom_banners_cta_border_radius' );
+		register_setting( 'custom-banners-style-settings-group', 'custom_banners_cta_button_font_size' );
+		register_setting( 'custom-banners-style-settings-group', 'custom_banners_cta_button_font_style' );
+		register_setting( 'custom-banners-style-settings-group', 'custom_banners_cta_button_font_family' );
+		register_setting( 'custom-banners-style-settings-group', 'custom_banners_cta_button_font_color' );
+		register_setting( 'custom-banners-style-settings-group', 'custom_banners_caption_font_size' );
+		register_setting( 'custom-banners-style-settings-group', 'custom_banners_caption_font_style' );
+		register_setting( 'custom-banners-style-settings-group', 'custom_banners_caption_font_family' );
+		register_setting( 'custom-banners-style-settings-group', 'custom_banners_caption_font_color' );
 	}
 	
 	//function to produce tabs on admin screen
-	function admin_tabs($current = 'homepage' ) {	
-		$tabs = array( 'custom-banners-settings' => __('Basic Options', $this->textdomain), 'custom-banners-help' => __('Help & Instructions', $this->textdomain));
+	function admin_tabs($current = 'homepage' ) {
+		$style_label = isValidCBKey() ? __('Style Options', $this->textdomain) : __('Style Options (Requires Pro)', $this->textdomain);
+		$tabs = array( 	'custom-banners-settings' => __('Basic Options', $this->textdomain), 
+						'custom-banners-style-settings' => $style_label,
+						'custom-banners-help' => __('Help &amp; Instructions', $this->textdomain)
+				);
 		echo '<div id="icon-themes" class="icon32"><br></div>';
 		echo '<h2 class="nav-tab-wrapper">';
 			foreach( $tabs as $tab => $name ){
@@ -188,6 +213,13 @@ class customBannersOptions
 			</table>
 			
 			<table class="form-table">
+			<?php
+				$this->text_input('custom_banners_default_width', 'Default Banner Width', 'Enter a default width for your banners, in pixels. If not specified, the banner will try to fit its container.', '');
+				$this->text_input('custom_banners_default_height', 'Default Banner Height', 'Enter a default height for your banners, in pixels. If not specified, the banner will try to fit its container.', '');
+			?>
+			</table>
+
+			<table class="form-table">
 				<tr valign="top">
 					<th scope="row"><label for="custom_banners_use_big_link">Link Entire Banner</label></th>
 					<td><input type="checkbox" name="custom_banners_use_big_link" id="custom_banners_use_big_link" value="1" <?php if(get_option('custom_banners_use_big_link')){ ?> checked="CHECKED" <?php } ?>/>
@@ -205,6 +237,28 @@ class customBannersOptions
 				</tr>
 			</table>
 			
+			<table class="form-table">
+				<tr valign="top">
+					<th scope="row"><label for="custom_banners_never_show_captions">Never Show Captions</label></th>
+					<td><input type="checkbox" name="custom_banners_never_show_captions" id="custom_banners_never_show_captions" value="1" <?php if(get_option('custom_banners_never_show_captions')){ ?> checked="CHECKED" <?php } ?>/>
+					<p class="description">If checked, your banners will not show their captions, even if you enter one.</p>
+					</td>
+				</tr>
+			</table>
+			
+			<table class="form-table">
+				<tr valign="top">
+					<th scope="row"><label for="custom_banners_never_show_cta_buttons">Never Show CTA Buttons</label></th>
+					<td><input type="checkbox" name="custom_banners_never_show_cta_buttons" id="custom_banners_never_show_cta_buttons" value="1" <?php if(get_option('custom_banners_never_show_cta_buttons')){ ?> checked="CHECKED" <?php } ?>/>
+					<p class="description">If checked, your banners will not show their buttons, even if you have enter a call to action.</p>
+					</td>
+				</tr>
+			</table>
+				
+			<p class="submit">
+				<input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
+			</p>
+
 			<?php include('registration_options.php'); ?>
 			
 			<p class="submit">
@@ -213,6 +267,121 @@ class customBannersOptions
 		</form>
 		</div><?php 
 	} // end basic_settings_page function	
+	
+	function style_settings_page()
+	{
+		$this->settings_page_top();
+		$disabled = !(isValidCBKey());
+		?><form method="post" action="options.php" class="gp_settings_form">
+			<?php if (!isValidCBKey()): ?>
+			<div class="custom_banners_not_registered">
+				<h3>Custom Banners Pro Required To Use These Features</h3>
+				<p>Custom Banners Pro is required to use these features. The options below will become instantly available once you have registered and activated your plugin. <br /><br /><a class="button" href="http://goldplugins.com/our-plugins/custom-banners/upgrade-to-custom-banners-pro/?utm_campaign=registration&utm_source=custom_banners_settings" target="_blank">Click Here To Upgrade To Pro</a> <br /> <br /><em>You'll receive your API keys as soon as you complete your payment, instantly unlocking these features and more!</em></p>
+			</div>
+			<?php endif; ?>
+			<?php settings_fields( 'custom-banners-style-settings-group' ); ?>
+			<h3>Style Options</h3>
+			<p>Use these options to adjust the style of your caption and your call to action buttons.</p>
+			<fieldset>
+				<legend>Caption Background</legend>				
+				<table class="form-table">
+					<?php 
+						$this->color_input('custom_banners_caption_background_color', 'Background Color', '#000000', $disabled);
+						$this->text_input('custom_banners_caption_background_opacity', 'Background Opacity (percentage)', '', '70', $disabled);
+					?>
+				</table>
+			</fieldset>
+			
+			<fieldset>
+				<legend>Caption Text</legend>
+				<table class="form-table">
+					<?php
+						$this->typography_input('custom_banners_caption_*', 'Caption Font', 'Please note: these settings can be overridden for each banner by using the Visual Editor.', '', '', '', '#ffffff', $disabled );
+					?>
+				</table>
+			</fieldset>
+						
+			<fieldset>
+				<legend>Call To Action (CTA) Button</legend>
+				<table class="form-table">
+					<?php
+						$this->typography_input('custom_banners_cta_button_*', 'Font', '', '', '', '', '', $disabled);
+						$this->color_input('custom_banners_cta_background_color', 'Background Color', '#ffa500', $disabled);
+						$this->color_input('custom_banners_cta_border_color', 'Border Color', '#ff8c00', $disabled);
+						$this->text_input('custom_banners_cta_border_radius', 'Border Radius', '', '5', $disabled);
+					?>
+				</table>
+			</fieldset>
+	
+			<p class="submit">
+				<input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
+			</p>
+		</form>
+		</div><?php 
+	}
+	
+	function text_input($name, $label, $description = '', $default_val = '', $disabled = false)
+	{
+		$val = get_option($name, $default_val);
+		if (empty($val)) {
+			$val = $default_val;
+		}
+		$this->shed->text(
+			array(
+				'name' => $name,
+				'label' => $label,
+				'value' => $val,
+				'description' => $description,
+				'disabled' => $disabled
+			)
+		);
+	}
+	
+	function color_input($name, $label, $default_color = '#000000', $disabled = false)
+	{		
+		$val = get_option($name, $default_color);
+		if (empty($val)) {
+			$val = $default_color;
+		}
+		$this->shed->color(
+			array(
+				'name' => $name,
+				'label' => $label,
+				'default_color' => $default_color,
+				'value' => $val,
+				'disabled' => $disabled
+			)
+		);
+	}
+	
+	function typography_input($name, $label, $description = '', $default_font_family = '', $default_font_size = '', $default_font_style = '', $default_font_color = '#000080', $disabled = false)
+	{
+		$options = array(
+			'name' => $name,
+			'label' => $label,
+			'default_color' => $default_font_color,
+			'description' => $description,
+			'google_fonts' => true,
+			'values' => array(),
+			'disabled' => $disabled			
+		);
+		$fields = array(
+			'font_size' => $default_font_size,
+			'font_family' => $default_font_family,
+			'font_color' => $default_font_color,
+			'font_style' => $default_font_style
+		);
+		foreach ($fields as $key => $default_value)
+		{
+			list($field_name, $field_id) = $this->shed->get_name_and_id($options, $key);
+			$val = get_option($field_name, $default_value);
+			if (empty($val)) {
+				$val = $default_value;
+			}			
+			$options['values'][$key] = $val;
+		}
+		$this->shed->typography($options);
+	}
 	
 	function help_settings_page(){
 		$this->settings_page_top();

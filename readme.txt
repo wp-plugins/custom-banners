@@ -3,7 +3,7 @@ Contributors: ghuger, richardgabriel
 Tags: banners, ads, rotating banners, custom banners, custom ads, custom rotating banners, random banners, random rotating banners
 Requires at least: 3.8
 Tested up to: 4.1.1
-Stable tag: 1.4.1
+Stable tag: 1.5.0
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -133,8 +133,14 @@ No worries!  This probably means the image you are using doesn't match the size 
 3. This is the List of Banner Groups - from here you can Create, Edit, or Delete a Banner Group.
 4. This is the Single Banner Widget.  You can use this widget to output and control a single banner anywhere you have a widget region on your website.
 5. This is the Rotating Banner Widget.  You can use this widget to output and control a rotating banner anywhere you have a widget region on your website.
+6. This is the Basic Options Page.  You can use this page to control various global options, such as the Height and Width of the Banner.
+7. This is the Style Options Page, for Pro Users.  You can use this page to control the size, style, and colors of the fonts, caption, borders, and buttons.
+8. This is the Help & Settings Page.  You can use this page for instructions on how to use the plugin.
 
 == Changelog ==
+
+= 1.5.0 =
+* Adds many new customization options (free and Pro)
 
 = 1.4.1 =
 * Repositions metaboxes, including Featured Image and Editor, into more usable positions
@@ -202,4 +208,4 @@ No worries!  This probably means the image you are using doesn't match the size 
 
 == Upgrade Notice ==
 
-* 1.4.1: Usability updates to the Add/Edit Banner screen
+* 1.5.0: Adds many new customization options (free and Pro)

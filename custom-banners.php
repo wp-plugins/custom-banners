@@ -4,7 +4,7 @@ Plugin Name: Custom Banners
 Plugin Script: custom-banners.php
 Plugin URI: http://goldplugins.com/our-plugins/custom-banners/
 Description: Allows you to create custom banners, which consist of an image, text, a link, and a call to action.  Custom banners are easily output via shortcodes. Each visitor to the website is then shown a random custom banner.
-Version: 1.4.1
+Version: 1.5.0
 Author: GoldPlugins
 Author URI: http://goldplugins.com/
 
@@ -13,6 +13,7 @@ Author URI: http://goldplugins.com/
 require_once('gold-framework/plugin-base.php');
 require_once('lib/lib.php');
 require_once('lib/custom_banners_options.php');
+require_once('lib/BikeShed/bikeshed.php');
 
 class CustomBannersPlugin extends GoldPlugin
 {
@@ -57,6 +58,9 @@ class CustomBannersPlugin extends GoldPlugin
 	
 	function add_hooks()
 	{
+		// add Google web fonts if needed
+		add_action( 'wp_enqueue_scripts', array($this, 'enqueue_webfonts'));
+		
 		parent::add_hooks();
 	}
 	
@@ -112,7 +116,7 @@ class CustomBannersPlugin extends GoldPlugin
 	
 	function output_banner_caption_metabox( $post ) {
 		echo '<div class="wp-editor-wrap">';
-		wp_editor($post->post_content, 'content', array('dfw' => true, 'tabindex' => 1) );
+		wp_editor($post->post_content, 'content', array('dfw' => true, 'tabindex' => 1, 'textarea_rows' => 3) );
 		echo '</div>';
 	}	
 	
@@ -196,7 +200,10 @@ class CustomBannersPlugin extends GoldPlugin
 							'timer' => 4000,
 							'use_image_tag' => false,
 							'show_pager_icons' => false,
-							'hide' => false);
+							'hide' => false,
+							'width' => get_option('custom_banners_default_width', ''),
+							'height' => get_option('custom_banners_default_height', '')
+							);
 							
 		$atts = shortcode_atts($defaults, $atts);
 		$banner_id = intval($atts['id']);
@@ -255,6 +262,8 @@ class CustomBannersPlugin extends GoldPlugin
 		$css_class = $this->get_option_value($banner_id, 'css_class', '');	
 		$use_big_link = get_option('custom_banners_use_big_link');
 		$open_in_window = get_option('custom_banners_open_link_in_new_window', 0);
+		$show_captions = !get_option('custom_banners_never_show_captions', 0);
+		$show_cta_buttons = !get_option('custom_banners_never_show_cta_buttons', 0);
 		
 		// placeholder variables
 		$html = '';
@@ -301,11 +310,13 @@ class CustomBannersPlugin extends GoldPlugin
 			}			
 		}		
 		
+		
 		if($atts['hide']){
-			$banner_display = 'style="display:none;"';
+			$banner_display = 'style="display:none; %s"';
 		} else {
-			$banner_display = '';
+			$banner_display = 'style="%s"';
 		}
+		$banner_wrapper_style = sprintf($banner_display, $this->build_banner_wrapper_css($atts));
 		
 		if($open_in_window){
 			$link_target = ' target="_blank" ';
@@ -313,24 +324,34 @@ class CustomBannersPlugin extends GoldPlugin
 			$link_target = '';
 		}
 		
+		$banner_style .= $this->build_banner_css($atts);
+		
 		// generate the html now
-		$html .= '<div class="banner_wrapper" '. $banner_display .'>';
+		$html .= '<div class="banner_wrapper" '. $banner_wrapper_style .'>';
 			$html .= '<div class="banner ' . $extra_classes_str . '" style="' . $banner_style . '">';
 				if($use_big_link){
 					$html .= '<a class="custom_banners_big_link" ' . $link_target . ' href="' . $target_url . '"></a>';
 				}
 				$html .= $img_html;
 				$caption = $banner->post_content;
-				if (strlen($caption) > 0 || strlen($cta) > 0)
+				if ( $show_captions && (strlen($caption) > 0 || strlen($cta) > 0) )
 				{
-					$html .= '<div class="banner_caption">';
-						$html .= $caption;
-						if (strlen($cta) > 0)
-						{				
+					$style_str = $this->build_caption_css();
+					$html .= '<div class="banner_caption" style="' . $style_str . '">';
+						
+						if ( $show_cta_buttons && strlen($cta) > 0 )
+						{
+							$style_str = $this->build_typography_css('custom_banners_cta_button_');
+							$style_str .= $this->build_button_css('custom_banners_cta_');
 							$html .= '<div class="banner_call_to_action">';
-								$html .= '<a href="' . $target_url . '" ' . $link_target . ' class="banner_btn_cta">' . htmlspecialchars($cta) . '</a>';
+								$html .= '<a href="' . $target_url . '" ' . $link_target . ' class="banner_btn_cta" style="' . $style_str . '">' . htmlspecialchars($cta) . '</a>';
 							$html .= '</div>'; //<!--.banner_call_to_action-->
 						}
+						
+						$inner_style_str = $this->build_typography_css('custom_banners_caption_');
+						$html .= '<div class="banner_caption_inner" style="' . $inner_style_str . '">';
+						$html .= $caption;
+						$html .= '</div>';
 					$html .= '</div>'; //<!--.banner_caption-->
 				}
 			$html .= '</div>'; //<!--.banner -->
@@ -437,5 +458,351 @@ class CustomBannersPlugin extends GoldPlugin
 	function add_meta_boxes(){
 		add_meta_box( 'banner_shortcodes', 'Shortcodes', array($this, 'display_shortcodes_meta_box'), 'banner', 'side', 'default' );
 	}
+	
+	
+	/*
+	 * Builds a CSS string for the banner wrapper. Primarily controls height and width
+	 *
+	 * @param	$atts		Attributes from the shortcode
+	 *
+	 * @returns	string		The completed CSS string, with the values inlined
+	 */
+	function build_banner_css($atts)
+	{
+		$defaults = array(
+						'width' => get_option('custom_banners_default_width', ''),
+						'height' => get_option('custom_banners_default_height', ''),
+					);
+		$atts = shortcode_atts($defaults, $atts);
+		
+		$css_rule_template = ' %s: %s;';
+		$output = '';
+
+		/* 
+		 * Width
+		 */
+		$option_val = $atts['width'];		
+		if (!empty($option_val)) {
+			if ( is_numeric($option_val) ) {
+				$option_val .= 'px';
+			}
+			$output .= sprintf($css_rule_template, 'width', $option_val);
+		}		
+		
+		/* 
+		 * Height
+		 */
+		$option_val = $atts['height'];		
+		if (!empty($option_val)) {
+			if ( is_numeric($option_val) ) {
+				$option_val .= 'px';
+			}
+			$output .= sprintf($css_rule_template, 'height', $option_val);
+		}		
+		
+		// return the completed CSS string
+		return trim($output);
+	}
+	
+	/*
+	 * Builds a CSS string for the banner itself. Primarily controls height and width
+	 *
+	 * @param	$atts		Attributes from the shortcode
+	 *
+	 * @returns	string		The completed CSS string, with the values inlined
+	 */
+	function build_banner_wrapper_css($atts)
+	{
+		$defaults = array(
+						'width' => get_option('custom_banners_default_width', ''),
+						'height' => get_option('custom_banners_default_height', ''),
+					);
+		$atts = shortcode_atts($defaults, $atts);
+		
+		$css_rule_template = ' %s: %s;';
+		$output = '';
+
+		/* 
+		 * Width
+		 */
+		$option_val = $atts['width'];		
+		if (!empty($option_val)) {
+			if ( is_numeric($option_val) ) {
+				$option_val .= 'px';
+			}
+			$output .= sprintf($css_rule_template, 'width', $option_val);
+		}		
+		
+		/* 
+		 * Height
+		 */
+		$option_val = $atts['height'];		
+		if (!empty($option_val)) {
+			if ( is_numeric($option_val) ) {
+				$option_val .= 'px';
+			}
+			$output .= sprintf($css_rule_template, 'height', $option_val);
+		}		
+		
+		// return the completed CSS string
+		return trim($output);
+	}
+	
+	/*
+	 * Builds a CSS string for the banner's caption
+	 *
+	 * @param	$atts		Attributes from the shortcode
+	 *
+	 * @returns	string		The completed CSS string, with the values inlined
+	 */
+	function build_caption_css($atts = array())
+	{
+		$css_rule_template = ' %s: %s;';
+		$output = '';
+		/* 
+		 * Background Color + Opacity
+		 */
+		$color_val = get_option('custom_banners_caption_background_color', '');
+		$opacity_val = get_option('custom_banners_caption_background_opacity', '');
+		
+		if (!empty($color_val)) {
+			// convert the hex string into an "rgba()" string
+			$opacity = !empty($opacity_val) ? ($opacity_val / 100) : 1;		
+			$rgba = $this->hex2rgba($color_val, $opacity);
+			$output .= sprintf($css_rule_template, 'background-color', $rgba);
+		}		
+		
+		/* 
+		 * Background Opacity
+		 */
+		if (!empty($option_val)) {
+			$output .= sprintf($css_rule_template, 'opacity', $option_val);
+		}		
+		
+		/* 
+		 * Remove Background image if Background Color / Opacity was specified
+		 */
+		if (!empty($output)) {
+			$output .= sprintf($css_rule_template, 'background-image', 'none');
+		}
+		// return the completed CSS string
+		return trim($output);	
+	}
+	
+	 
+	function hex2rgba($color, $opacity = false) { 
+		$default = 'rgb(0,0,0)';
+ 
+		//Return default if no color provided
+		if(empty($color)) {
+			return $default;
+		}
+ 
+		//Sanitize $color if "#" is provided 
+		if ($color[0] == '#' ) {
+			$color = substr( $color, 1 );
+		}
+ 
+		//Check if color has 6 or 3 characters and get values
+		if (strlen($color) == 6) {
+				$hex = array( $color[0] . $color[1], $color[2] . $color[3], $color[4] . $color[5] );
+		} elseif ( strlen( $color ) == 3 ) {
+				$hex = array( $color[0] . $color[0], $color[1] . $color[1], $color[2] . $color[2] );
+		} else {
+				return $default;
+		}
+ 
+		//Convert hexadec to rgb
+		$rgb =  array_map('hexdec', $hex);
+ 
+		//Check if opacity is set(rgba or rgb)
+		if($opacity){
+			if(abs($opacity) > 1)
+				$opacity = 1.0;
+			$output = 'rgba('.implode(",",$rgb).','.$opacity.')';
+		} else {
+			$output = 'rgb('.implode(",",$rgb).')';
+		}
+ 
+		//Return rgb(a) color string
+		return $output;
+	}
+	
+	/*
+	 * Builds a CSS string for the call to action button
+	 *
+	 * @param	$prefix		The prefix for the settings
+	 *
+	 * @returns	string		The completed CSS string, with the values inlined
+	 */
+	function build_button_css($prefix)
+	{
+		$css_rule_template = ' %s: %s;';
+		$output = '';
+		if (!isValidCBKey()) {
+			return $output;
+		}		
+
+		/* 
+		 * Background Color
+		 */
+		$option_val = get_option($prefix . 'background_color', '');
+		if (!empty($option_val)) {
+			$output .= sprintf($css_rule_template, 'background-color', $option_val);
+		}		
+		
+		/* 
+		 * Border Color
+		 */
+		$option_val = get_option($prefix . 'border_color', '');
+		if (!empty($option_val)) {
+			$output .= sprintf($css_rule_template, 'border-color', $option_val);
+		}		
+		
+		/* 
+		 * Border Radius
+		 */
+		$option_val = get_option($prefix . 'border_radius', '');
+		if (!empty($option_val)) {
+			// append 'px' if needed
+			if ( is_numeric($option_val) ) {
+				$option_val .= 'px';
+			}
+			$output .= sprintf($css_rule_template, 'border-radius', $option_val);
+		}
+
+		// return the completed CSS string
+		return trim($output);		
+	}
+	
+	/*
+	 * Builds a CSS string corresponding to the values of a typography setting
+	 *
+	 * @param	$prefix		The prefix for the settings. We'll append font_name,
+	 *						font_size, etc to this prefix to get the actual keys
+	 *
+	 * @returns	string		The completed CSS string, with the values inlined
+	 */
+	function build_typography_css($prefix)
+	{
+		$css_rule_template = ' %s: %s;';
+		$output = '';
+		if (!isValidCBKey()) {
+			return $output;
+		}		
+		
+		/* 
+		 * Font Family
+		 */
+		 
+		$option_val = get_option($prefix . 'font_family', '');
+		if (!empty($option_val)) {
+			// strip off 'google:' prefix if needed
+			$option_val = str_replace('google:', '', $option_val);
+
+		
+			// wrap font family name in quotes
+			$option_val = '\'' . $option_val . '\'';
+			$output .= sprintf($css_rule_template, 'font-family', $option_val);
+		}
+		
+		/* 
+		 * Font Size
+		 */
+		$option_val = get_option($prefix . 'font_size', '');
+		if (!empty($option_val)) {
+			// append 'px' if needed
+			if ( is_numeric($option_val) ) {
+				$option_val .= 'px';
+			}
+			$output .= sprintf($css_rule_template, 'font-size', $option_val);
+		}		
+		
+		/* 
+		 * Font Color
+		 */
+		$option_val = get_option($prefix . 'font_color', '');
+		if (!empty($option_val)) {
+			$output .= sprintf($css_rule_template, 'color', $option_val);
+		}
+
+		/* 
+		 * Font Style - add font-style and font-weight rules
+		 * NOTE: in this special case, we are adding 2 rules!
+		 */
+		$option_val = get_option($prefix . 'font_style', '');
+
+		// Convert the value to 2 CSS rules, font-style and font-weight
+		// NOTE: we lowercase the value before comparison, for simplification
+		switch(strtolower($option_val))
+		{
+			case 'regular':
+				// not bold not italic
+				$output .= sprintf($css_rule_template, 'font-style', 'normal');
+				$output .= sprintf($css_rule_template, 'font-weight', 'normal');
+			break;
+		
+			case 'bold':
+				// bold, but not italic
+				$output .= sprintf($css_rule_template, 'font-style', 'normal');
+				$output .= sprintf($css_rule_template, 'font-weight', 'bold');
+			break;
+
+			case 'italic':
+				// italic, but not bold
+				$output .= sprintf($css_rule_template, 'font-style', 'italic');
+				$output .= sprintf($css_rule_template, 'font-weight', 'normal');
+			break;
+		
+			case 'bold italic':
+				// bold and italic
+				$output .= sprintf($css_rule_template, 'font-style', 'italic');
+				$output .= sprintf($css_rule_template, 'font-weight', 'bold');
+			break;
+			
+			default:
+				// empty string or other invalid value, ignore and move on
+			break;			
+		}			
+
+		// return the completed CSS string
+		return trim($output);		
+	}
+	
+	// Enqueue any needed Google Web Fonts
+	function enqueue_webfonts()
+	{
+		$font_list = $this->list_required_google_fonts();
+		$font_list_encoded = array_map('urlencode', $this->list_required_google_fonts());
+		$font_str = implode('|', $font_list_encoded);
+		
+		//don't register this unless a font is set to register
+		if(strlen($font_str)>2){
+			wp_register_style( 'custom_banners_webfonts', 'http://fonts.googleapis.com/css?family=' . $font_str);
+			wp_enqueue_style( 'custom_banners_webfonts' );
+		}
+	}
+
+	function list_required_google_fonts()
+	{
+		// check each typography setting for google fonts, and build a list
+		$option_keys = array(
+			'custom_banners_cta_button_font_family',
+		);
+		$fonts = array();
+		foreach ($option_keys as $option_key) {
+			$option_value = get_option($option_key);
+			if (strpos($option_value, 'google:') !== FALSE) {
+				$option_value = str_replace('google:', '', $option_value);
+				
+				//only add the font to the array if it was in fact a google font
+				$fonts[$option_value] = $option_value;				
+			}
+		}
+		return $fonts;
+	}	
+
+	
+	
 }
 $ebp = new CustomBannersPlugin();
