@@ -96,8 +96,8 @@ class customBannersOptions
 	function admin_scripts()
 	{
 		wp_enqueue_script(
-			'gp-admin',
-			plugins_url('../assets/js/gp-admin.js', __FILE__),
+			'gp-admin_v2',
+			plugins_url('../assets/js/gp-admin_v2.js', __FILE__),
 			array( 'jquery' ),
 			false,
 			true
@@ -141,8 +141,8 @@ class customBannersOptions
 ?>
 		<script type="text/javascript">
 			jQuery(function () {
-				if (typeof(gold_plugins_init_mailchimp_form) == 'function') {
-				gold_plugins_init_mailchimp_form();
+				if (typeof(gold_plugins_init_coupon_box) == 'function') {
+				gold_plugins_init_coupon_box();
 				}
 			});
 		</script>
@@ -153,20 +153,22 @@ class customBannersOptions
 				<p class="pitch">Submit your name and email and we’ll send you a coupon for 20% off your upgrade to the Pro version.</p>
 			</div>
 			<div id="mc_embed_signup">
-				<form action="http://illuminatikarate.us2.list-manage.com/subscribe/post?u=403e206455845b3b4bd0c08dc&amp;id=27d2c9ee87" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
-					<label for="mce-NAME">Your Name:</label>
-					<input type="text" value="<?php echo (!empty($current_user->display_name) ? $current_user->display_name : ''); ?>" name="NAME" class="name" id="mce-NAME" placeholder="Your Name">
-					<label for="mce-EMAIL">Your Email:</label>
-					<input type="email" value="<?php echo (!empty($current_user->user_email) ? $current_user->user_email : ''); ?>" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
-					<!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
-					<div style="position: absolute; left: -5000px;"><input type="text" name="b_403e206455845b3b4bd0c08dc_6ad78db648" tabindex="-1" value=""></div>
+				<form action="" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+					<div class="fields_wrapper">
+						<label for="mce-NAME">Your Name:</label>
+						<input type="text" value="<?php echo (!empty($current_user->display_name) ? $current_user->display_name : ''); ?>" name="NAME" class="name" id="mce-NAME" placeholder="Your Name">
+						<label for="mce-EMAIL">Your Email:</label>
+						<input type="email" value="<?php echo (!empty($current_user->user_email) ? $current_user->user_email : ''); ?>" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+						<!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+						<div style="position: absolute; left: -5000px;"><input type="text" name="b_403e206455845b3b4bd0c08dc_6ad78db648" tabindex="-1" value=""></div>
+					</div>
 					<div class="clear"><input type="submit" value="Send Me The Coupon Now" name="subscribe" id="mc-embedded-subscribe" class="smallBlueButton"></div>
-						<p class="secure"><img src="<?php echo plugins_url( '../assets/img/lock.png', __FILE__ ); ?>" alt="Lock" width="16px" height="16px" />We respect your privacy.</p>
-						<input type="hidden" id="mc-upgrade-plugin-name" value="Custom Banners Pro" />
-						<input type="hidden" id="mc-upgrade-link-per" value="http://goldplugins.com/purchase/custom-banners-pro/single?promo=newsub20" />
-						<input type="hidden" id="mc-upgrade-link-biz" value="http://goldplugins.com/purchase/custom-banners-pro/business?promo=newsub20" />
-						<input type="hidden" id="mc-upgrade-link-dev" value="http://goldplugins.com/purchase/custom-banners-pro/developer?promo=newsub20" />
-						<input type="hidden" id="gold_plugins_already_subscribed" name="gold_plugins_already_subscribed" value="<?php echo get_user_setting ('_c_b_ml_has_subscribed', '0'); ?>" />
+					<p class="secure"><img src="<?php echo plugins_url( '../assets/img/lock.png', __FILE__ ); ?>" alt="Lock" width="16px" height="16px" />We respect your privacy.</p>
+					<input type="hidden" name="PRODUCT" value="Custom Banners Pro" />
+					<input type="hidden" id="mc-upgrade-plugin-name" value="Custom Banners Pro" />
+					<input type="hidden" id="mc-upgrade-link-per" value="http://goldplugins.com/purchase/custom-banners-pro/single?promo=newsub20" />
+					<input type="hidden" id="mc-upgrade-link-biz" value="http://goldplugins.com/purchase/custom-banners-pro/business?promo=newsub20" />
+					<input type="hidden" id="mc-upgrade-link-dev" value="http://goldplugins.com/purchase/custom-banners-pro/developer?promo=newsub20" />
 				</form>
 				<div class="features">
 					<strong>When you upgrade, you'll instantly gain access to:</strong>
@@ -250,7 +252,7 @@ class customBannersOptions
 				<tr valign="top">
 					<th scope="row"><label for="custom_banners_never_show_cta_buttons">Never Show CTA Buttons</label></th>
 					<td><input type="checkbox" name="custom_banners_never_show_cta_buttons" id="custom_banners_never_show_cta_buttons" value="1" <?php if(get_option('custom_banners_never_show_cta_buttons')){ ?> checked="CHECKED" <?php } ?>/>
-					<p class="description">If checked, your banners will not show their buttons, even if you have enter a call to action.</p>
+					<p class="description">If checked, your banners will not show their buttons, even if you have entered a call to action.</p>
 					</td>
 				</tr>
 			</table>

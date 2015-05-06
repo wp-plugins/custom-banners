@@ -2,8 +2,8 @@
 Contributors: ghuger, richardgabriel
 Tags: banners, ads, rotating banners, custom banners, custom ads, custom rotating banners, random banners, random rotating banners
 Requires at least: 3.8
-Tested up to: 4.1.1
-Stable tag: 1.5.0
+Tested up to: 4.2.1
+Stable tag: 1.5.1
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -139,6 +139,9 @@ No worries!  This probably means the image you are using doesn't match the size 
 
 == Changelog ==
 
+= 1.5.1 =
+* Admin UI updates, bug fixes
+
 = 1.5.0 =
 * Adds many new customization options (free and Pro)
 
@@ -208,4 +211,4 @@ No worries!  This probably means the image you are using doesn't match the size 
 
 == Upgrade Notice ==
 
-* 1.5.0: Adds many new customization options (free and Pro)
+* 1.5.1: Admin UI updates, bug fixes

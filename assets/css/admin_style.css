@@ -532,3 +532,12 @@ div.custom_banners_not_registered > p {
 	font-size: 18px;
 	font-weight: bold;
 }
+#mc-show-coupon-codes.modern {
+    padding: 20px 10px 10px;
+}
+#mc-show-coupon-codes.modern h3 {
+    border-bottom: 0 none;
+}
+#mc-show-coupon-codes.modern .thx {
+    color: gray;
+}
