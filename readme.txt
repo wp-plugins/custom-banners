@@ -2,8 +2,8 @@
 Contributors: ghuger, richardgabriel
 Tags: banners, ads, rotating banners, custom banners, custom ads, custom rotating banners, random banners, random rotating banners
 Requires at least: 3.8
-Tested up to: 4.2.1
-Stable tag: 1.5.1
+Tested up to: 4.2.2
+Stable tag: 1.5.2
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -30,7 +30,7 @@ Instead, you'll be able to manage that banner right from the WordPress dashboard
 
 **Easily Add Captions and Call-To-Action Buttons To Your Custom Banners**
 
-Custom Banners lets you optionally specify a caption and a call-to-action text and URL for each banner, making your banners an effective way to drive visitors to your most important pages.
+Custom Banners lets you optionally specify a caption and a call-to-action text and URL for each banner, making your banners an effective way to drive visitors to your most important pages.  Captions support all types of content, including YouTube videos!
 
 Use the captions to announce a new special, and use the call-to-action button to let your customers claim it right away.
 
@@ -103,10 +103,11 @@ You have a few things to pay attention to:
 ### Outputting Fading or Sliding Banners ###
 * NOTE: This feature requires the [Pro version of Custom Banners](http://goldplugins.com/our-plugins/custom-banners/ "Custom Banners Pro")
 * LIVE Examples are available [here](http://goldplugins.com/documentation/custom-banners-documentation/custom-banners-pro-examples/ "Custom Banners Pro Examples")
-- To output Random Banners from a Specific Group, place the shortcode ```[banner group='test' count='3' transition='scrollHorz' timer='2000']``` in the desired area of the Page or Post Content.  Change the value of count from 3 to however many slides you want to use.  For transition, use either 'scrollHorz' or 'fadeIn'.  For timer, use 1000 times the number of seconds you want between transitions (ie, for 4 seconds input 4000.)
-- To output Random Banners, place the shortcode ```[banner count='3' transition='scrollHorz' timer='2000']``` in the desired area of the Page or Post Content.  Change the value of count from 3 to however many slides you want to use.  For transition, use either 'scrollHorz' or 'fadeIn'.  For timer, use 1000 times the number of seconds you want between transitions (ie, for 4 seconds input 4000.)
-- Supported transitions are ```scrollVert```,```scrollHorz```,```fadeIn```,```fadeOut```,```flipHorz```,```flipVert```, and ```tileSlide```.
+- To output Random Banners from a Specific Group, place the shortcode ```[banner group='test' count='3' transition='scrollHorz' timer='2000']``` in the desired area of the Page or Post Content.  Change the value of count from 3 to however many slides you want to use.  For transition, use either 'scrollHorz' or 'fade'.  For timer, use 1000 times the number of seconds you want between transitions (ie, for 4 seconds input 4000.)
+- To output Random Banners, place the shortcode ```[banner count='3' transition='scrollHorz' timer='2000']``` in the desired area of the Page or Post Content.  Change the value of count from 3 to however many slides you want to use.  For transition, use either 'scrollHorz' or 'fade'.  For timer, use 1000 times the number of seconds you want between transitions (ie, for 4 seconds input 4000.)
+- Supported transitions are ```scrollVert```,```scrollHorz```,```fade```,```fadeOut```,```flipHorz```,```flipVert```, and ```tileSlide```.
 - To Show Pager Icons below your Banner, use the attribute ```pager='true'``` or ```pager='1'```.  On the Widget, check the box next to Show Pager Icons.
+- To have the Slideshow Pause on Hover, use the attribute ```pause_on_hover=true```.  Defaults to false.
 
 == Frequently Asked Questions ==
 
@@ -126,6 +127,10 @@ Alright - all you need to do is go to Settings -> Permalinks and click the Save 
 
 No worries!  This probably means the image you are using doesn't match the size of the area it is being displayed in.  Try resizing and cropping your image to fit the available area, and then upload it again!
 
+= Ack! When I enabled my slideshow, my slides disappeared! = 
+
+OK!  This usually happens when there isn't a default Height and Width set on your Basic Options, causing the dimensions to not be correctly set on your slides.  All you have to do is adjust the Default Banner Width and Default Banner Height to suit your needs!
+
 == Screenshots ==
 
 1. This is the Add New Banner Page.
@@ -138,6 +143,12 @@ No worries!  This probably means the image you are using doesn't match the size 
 8. This is the Help & Settings Page.  You can use this page for instructions on how to use the plugin.
 
 == Changelog ==
+
+= 1.5.2 =
+* CSS Fix for Clickable Banner
+* Update Cycle2 to 2.1.6
+* Update Cycle2 Plugins to most recent versions
+* Adds Support for Youtube Videos to Slideshows
 
 = 1.5.1 =
 * Admin UI updates, bug fixes
@@ -211,4 +222,4 @@ No worries!  This probably means the image you are using doesn't match the size 
 
 == Upgrade Notice ==
 
-* 1.5.1: Admin UI updates, bug fixes
+* 1.5.2: CSS Fix for Clickable Banner; Cycle2 JS update; YouTube Video Support

@@ -4,7 +4,7 @@ Plugin Name: Custom Banners
 Plugin Script: custom-banners.php
 Plugin URI: http://goldplugins.com/our-plugins/custom-banners/
 Description: Allows you to create custom banners, which consist of an image, text, a link, and a call to action.  Custom banners are easily output via shortcodes. Each visitor to the website is then shown a random custom banner.
-Version: 1.5.1
+Version: 1.5.2
 Author: GoldPlugins
 Author URI: http://goldplugins.com/
 
@@ -202,8 +202,9 @@ class CustomBannersPlugin extends GoldPlugin
 							'show_pager_icons' => false,
 							'hide' => false,
 							'width' => get_option('custom_banners_default_width', ''),
-							'height' => get_option('custom_banners_default_height', '')
-							);
+							'height' => get_option('custom_banners_default_height', ''),
+							'pause_on_hover' => false
+						);
 							
 		$atts = shortcode_atts($defaults, $atts);
 		$banner_id = intval($atts['id']);
@@ -214,8 +215,8 @@ class CustomBannersPlugin extends GoldPlugin
 		if($banner_id == ''){
 			$banners = get_posts(array('posts_per_page' => $atts['count'], 'orderby' => 'rand', 'post_type'=> 'banner', 'banner_groups' => $atts['group']));
 		
-			if(isValidCBKey() && (in_array($atts['transition'], array('fadeIn','fadeOut','scrollHorz','scrollVert','shuffle','carousel','flipHorz','flipVert','tileSlide')))){
-				$html .= '<div class="cycle-slideshow" data-cycle-fx="' . $atts['transition'] . '" data-cycle-timeout="' . $atts['timer'] . '" data-cycle-slides="> div.banner_wrapper" >';
+			if(isValidCBKey() && (in_array($atts['transition'], array('fade','fadeIn','fadeOut','scrollHorz','scrollVert','shuffle','carousel','flipHorz','flipVert','tileSlide')))){
+				$html .= '<div class="cycle-slideshow" data-cycle-fx="' . $atts['transition'] . '" data-cycle-timeout="' . $atts['timer'] . '" data-cycle-pause-on-hover="' . $atts['pause_on_hover'] . '" data-cycle-slides="> div.banner_wrapper" >';
 			}
 		
 			$first = true;
@@ -233,7 +234,7 @@ class CustomBannersPlugin extends GoldPlugin
 				$html .= $this->buildBannerHTML($banner, $banner_id, $atts);
 			}
 			
-			if(isValidCBKey() && (in_array($atts['transition'], array('fadeIn','fadeOut','scrollHorz','scrollVert','shuffle','carousel','flipHorz','flipVert','tileSlide')))){
+			if(isValidCBKey() && (in_array($atts['transition'], array('fade','fadeIn','fadeOut','scrollHorz','scrollVert','shuffle','carousel','flipHorz','flipVert','tileSlide')))){
 				//add pager to bottom of slideshow, if option set
 				if($atts['pager'] || $atts['show_pager_icons'] ){
 					$html .= '<div class="cycle-pager"></div>';

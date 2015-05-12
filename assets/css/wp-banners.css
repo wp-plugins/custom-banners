@@ -13,6 +13,13 @@
 	right:0;
 	bottom:0;
 	left:0;
+	z-index: 999; /* set high to go over caption */
+}
+
+/* Make Youtube Videos Clickable, even when Entire banner is clickable */
+.banner_caption iframe {
+    position: relative;
+    z-index: 9999;
 }
 
 .banner_wrapper .banner .banner_caption {
@@ -22,7 +29,7 @@
 	position: absolute;
 	left: 0;
 	right: 0;
-}			
+}		
 
 .banner_wrapper .banner.bottom .banner_caption {
 	bottom: 0;

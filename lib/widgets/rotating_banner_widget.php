@@ -26,7 +26,7 @@ class rotatingBannerWidget extends WP_Widget
 	}
 
 	function form($instance){
-		$instance = wp_parse_args( (array) $instance, array( 'title' => '', 'num_banners' => null, 'timer' => '4000', 'caption_position' => 'bottom', 'use_image_tag' => false, 'transition' => 'none', 'group' => '', 'show_pager_icons' => false) );
+		$instance = wp_parse_args( (array) $instance, array( 'title' => '', 'num_banners' => null, 'timer' => '4000', 'caption_position' => 'bottom', 'use_image_tag' => false, 'transition' => 'none', 'group' => '', 'show_pager_icons' => false, 'pause_on_hover' => false) );
 		$title = $instance['title'];
 		$num_banners = $instance['num_banners'];
 		$transition = $instance['transition'];
@@ -35,6 +35,7 @@ class rotatingBannerWidget extends WP_Widget
 		$use_image_tag = $instance['use_image_tag'];
 		$show_pager_icons = $instance['show_pager_icons'];
 		$timer = $instance['timer'];
+		$pause_on_hover = $instance['pause_on_hover'];
 		
 		if(!isValidCBKey()){
 			echo '<p><a href="http://goldplugins.com/our-plugins/custom-banners/" target="_blank">Upgrade</a> to Custom Banners Pro today to unlock this widget and more cool features!</p>';
@@ -57,7 +58,7 @@ class rotatingBannerWidget extends WP_Widget
 						
 			<p><label for="<?php echo $this->get_field_id('transition'); ?>">Transition:</label>
 			<select <?php if(!isValidCBKey()):?> disabled="DISABLED" <?php endif;?> id="<?php echo $this->get_field_id('transition'); ?>" name="<?php echo $this->get_field_name('transition'); ?>">
-				<option value="fadeIn"  <?php if($transition == "fadeIn"): ?> selected="SELECTED" <?php endif; ?>>Fade In</option>
+				<option value="fade"  <?php if($transition == "fade"): ?> selected="SELECTED" <?php endif; ?>>Fade</option>
 				<option value="fadeOut"  <?php if($transition == "fadeOut"): ?> selected="SELECTED" <?php endif; ?>>Fade Out</option>
 				<option value="scrollHorz"  <?php if($transition == "scrollHorz"): ?> selected="SELECTED" <?php endif; ?>>Horizontal Scroll</option>
 				<option value="scrollVert"  <?php if($transition == "scrollVert"): ?> selected="SELECTED" <?php endif; ?>>Vertical Scroll</option>
@@ -92,6 +93,8 @@ class rotatingBannerWidget extends WP_Widget
 			<p><label for="<?php echo $this->get_field_id('use_image_tag'); ?>">Use Image Tag Instead of Background Image: </label><input <?php if(!isValidCBKey()):?> disabled="DISABLED" <?php endif;?> class="widefat" id="<?php echo $this->get_field_id('use_image_tag'); ?>" name="<?php echo $this->get_field_name('use_image_tag'); ?>" type="checkbox" value="1" <?php if($use_image_tag){ ?>checked="CHECKED"<?php } ?>/></p>
 			
 			<p><label for="<?php echo $this->get_field_id('show_pager_icons'); ?>">Show Pager Icons: </label><input <?php if(!isValidCBKey()):?> disabled="DISABLED" <?php endif;?> class="widefat" id="<?php echo $this->get_field_id('show_pager_icons'); ?>" name="<?php echo $this->get_field_name('show_pager_icons'); ?>" type="checkbox" value="1" <?php if($show_pager_icons){ ?>checked="CHECKED"<?php } ?>/></p>
+			
+			<p><label for="<?php echo $this->get_field_id('pause_on_hover'); ?>">Pause Slideshow on Hover: </label><input <?php if(!isValidCBKey()):?> disabled="DISABLED" <?php endif;?> class="widefat" id="<?php echo $this->get_field_id('pause_on_hover'); ?>" name="<?php echo $this->get_field_name('pause_on_hover'); ?>" type="checkbox" value="true" <?php if($pause_on_hover){ ?>checked="CHECKED"<?php } ?>/></p>
 		<?php
 	}
 
@@ -105,6 +108,7 @@ class rotatingBannerWidget extends WP_Widget
 		$instance['transition'] = $new_instance['transition'];
 		$instance['group'] = $new_instance['group'];
 		$instance['timer'] = $new_instance['timer'];
+		$instance['pause_on_hover'] = $new_instance['pause_on_hover'];
 		return $instance;
 	}
 
@@ -121,7 +125,8 @@ class rotatingBannerWidget extends WP_Widget
 							'timer' => 4000,
 							'use_image_tag' => false,
 							'hide' => false,
-							'show_pager_icons' => false);
+							'show_pager_icons' => false,
+							'pause_on_hover' => false);
 			
 			extract($args, EXTR_SKIP);
 
@@ -135,6 +140,7 @@ class rotatingBannerWidget extends WP_Widget
 			$atts['transition'] = empty($instance['transition']) ? '1' : $instance['transition'];
 			$atts['group'] = empty($instance['group']) ? '' : $instance['group'];
 			$atts['timer'] = empty($instance['timer']) ? '4000' : $instance['timer'];
+			$atts['pause_on_hover'] = empty($instance['pause_on_hover']) ? false : $instance['pause_on_hover'];
 			
 			if (!empty($title)){
 				echo $before_title . $title . $after_title;;
