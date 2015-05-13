@@ -3,7 +3,7 @@ Contributors: ghuger, richardgabriel
 Tags: banners, ads, rotating banners, custom banners, custom ads, custom rotating banners, random banners, random rotating banners
 Requires at least: 3.8
 Tested up to: 4.2.2
-Stable tag: 1.5.2
+Stable tag: 1.5.3
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -144,6 +144,9 @@ OK!  This usually happens when there isn't a default Height and Width set on you
 
 == Changelog ==
 
+= 1.5.3 =
+* Fix jQuery error causing certain users to experience issues on their dashboard
+
 = 1.5.2 =
 * CSS Fix for Clickable Banner
 * Update Cycle2 to 2.1.6
@@ -222,4 +225,4 @@ OK!  This usually happens when there isn't a default Height and Width set on you
 
 == Upgrade Notice ==
 
-* 1.5.2: CSS Fix for Clickable Banner; Cycle2 JS update; YouTube Video Support
+* 1.5.3: Fix admin javascript error preventing certain dashboard functions from working.
