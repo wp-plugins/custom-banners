@@ -4,7 +4,7 @@ Plugin Name: Custom Banners
 Plugin Script: custom-banners.php
 Plugin URI: http://goldplugins.com/our-plugins/custom-banners/
 Description: Allows you to create custom banners, which consist of an image, text, a link, and a call to action.  Custom banners are easily output via shortcodes. Each visitor to the website is then shown a random custom banner.
-Version: 1.5.3
+Version: 1.5.4
 Author: GoldPlugins
 Author URI: http://goldplugins.com/
 
@@ -14,11 +14,17 @@ require_once('gold-framework/plugin-base.php');
 require_once('lib/lib.php');
 require_once('lib/custom_banners_options.php');
 require_once('lib/BikeShed/bikeshed.php');
+require_once('lib/cbp_expiration_date.class.php');
 
-class CustomBannersPlugin extends GoldPlugin
+class CustomBannersPlugin extends CBP_GoldPlugin
 {
+	var $transitions = array('fade','fadeIn','fadeOut','scrollHorz','scrollVert','shuffle','carousel','flipHorz','flipVert','tileSlide');
+	
 	function __construct()
 	{
+		// create subclasses
+		$this->ExpirationDate = new CBP_ExpirationDate($this, __FILE__);
+		
 		$this->add_hooks();
 		$this->create_post_types();
 		$this->register_taxonomies();
@@ -58,8 +64,10 @@ class CustomBannersPlugin extends GoldPlugin
 	
 	function add_hooks()
 	{
+		global $post;
+		
 		// add Google web fonts if needed
-		add_action( 'wp_enqueue_scripts', array($this, 'enqueue_webfonts'));
+		add_action( 'wp_enqueue_scripts', array($this, 'enqueue_webfonts') );
 		
 		parent::add_hooks();
 	}
@@ -211,45 +219,70 @@ class CustomBannersPlugin extends GoldPlugin
 		
 		$html = '';
 		
-		// load the banner's data
-		if($banner_id == ''){
-			$banners = get_posts(array('posts_per_page' => $atts['count'], 'orderby' => 'rand', 'post_type'=> 'banner', 'banner_groups' => $atts['group']));
-		
-			if(isValidCBKey() && (in_array($atts['transition'], array('fade','fadeIn','fadeOut','scrollHorz','scrollVert','shuffle','carousel','flipHorz','flipVert','tileSlide')))){
-				$html .= '<div class="cycle-slideshow" data-cycle-fx="' . $atts['transition'] . '" data-cycle-timeout="' . $atts['timer'] . '" data-cycle-pause-on-hover="' . $atts['pause_on_hover'] . '" data-cycle-slides="> div.banner_wrapper" >';
+		// Generate the HTML for the requested banners (could be a single banner, or many)
+		if( $banner_id > 0 ) {
+			// A single banner ID was specified, so just load it directly
+			$banner = get_post($banner_id);			
+			$html .= $this->buildBannerHTML($banner, $banner_id, $atts);
+		}
+		else {
+			// choose a banner based on the other attributes 	
+			$banners = $this->get_banners_by_atts($atts);
+			$slideshow = ( isValidCBKey() && (in_array($atts['transition'], $this->transitions)) );
+
+			// start the slideshow's HTML (if required)
+			if( $slideshow ) {
+				$html .= '<div class="cycle-slideshow" data-cycle-fx="' . $atts['transition'] . '" data-cycle-timeout="' . $atts['timer'] . '" data-cycle-pause-on-hover="' . $atts['pause_on_hover'] . '" data-cycle-slides="> div.banner_wrapper" >';				
 			}
 		
-			$first = true;
-		
-			foreach($banners as $banner){
+			// build the HTML for each banner, concatenating its output to $html
+			foreach($banners as $index => $banner) {
+				// If we are outputting a slideshow, hide all but the first banner
+				$atts['hide'] = ( $slideshow && ($index > 0) );
 				
-				//hide all but the first banner
-				if($first){
-					$atts['hide'] = false;
-					$first = false;
-				} else {
-					$atts['hide'] = true;
-				}
-				
+				// Add this banner's HTML to the output
 				$html .= $this->buildBannerHTML($banner, $banner_id, $atts);
 			}
 			
-			if(isValidCBKey() && (in_array($atts['transition'], array('fade','fadeIn','fadeOut','scrollHorz','scrollVert','shuffle','carousel','flipHorz','flipVert','tileSlide')))){
-				//add pager to bottom of slideshow, if option set
+			// add a pager and close the slideshow's HTML (if requested)
+			if( $slideshow ){
 				if($atts['pager'] || $atts['show_pager_icons'] ){
 					$html .= '<div class="cycle-pager"></div>';
-				}
-				
+				}				
 				$html .= '</div><!-- end slideshow -->';
 			}
-		} else {
-			$banner = get_post($banner_id);
-			
-			$html .= $this->buildBannerHTML($banner, $banner_id, $atts);
 		}
 		
 		// return the generated HTML
 		return $html;
+	}
+	
+	function get_banners_by_atts($atts)
+	{
+		$args = array(
+			'posts_per_page' => $atts['count'],
+			'orderby' => 'rand',
+			'post_type'=> 'banner',
+			'banner_groups' => $atts['group'],
+			'nopaging' => ($atts['count'] == '-1'), // turn paging off posts_per_page is unlimited
+			'meta_query' => array(
+				'relation' => 'OR',
+				array(
+					'key' => '_cbp_expiration_timestamp',
+					'value' => 'dummy', // prior to 3.9, SOME value is required even when using "NOT EXISTS"
+					'compare' => 'NOT EXISTS', // 'NOT EXISTS' required WP >= 3.5
+				),
+				array(
+					'key' => '_cbp_expiration_timestamp',
+					'value' => current_time('mysql'),
+					'compare' => '>',
+				)
+			)
+		);
+
+		$banners_query = new WP_Query( $args );
+		$banners = !empty($banners_query->posts) ? $banners_query->posts : array();
+		return $banners;
 	}
 	
 	function buildBannerHTML($banner, $banner_id, $atts){
@@ -369,17 +402,13 @@ class CustomBannersPlugin extends GoldPlugin
 		if(isValidCBKey()){  
 			//need to include cycle2 this way, for compatibility with our other plugins
 			$jsUrl = plugins_url( 'assets/js/jquery.cycle2.min.js' , __FILE__ );
-			$this->add_script('cycle2',  $jsUrl, array( 'jquery' ),
-			false,
-			true);		
+			$this->add_script('cycle2',  $jsUrl, array( 'jquery' ),	false, true);
 			
 			$jsUrl = plugins_url( 'assets/js/wp-banners.js' , __FILE__ );
-			$this->add_script('wp-banners-js',  $jsUrl, array( 'jquery' ),
-			false,
-			true);			
+			$this->add_script('wp-banners-js',  $jsUrl, array( 'jquery' ), false, true);
 		}
 	}
- 
+	
 	//this is the heading of the new column we're adding to the banner posts list
 	function custom_banners_column_head($defaults) {  
 		$defaults = array_slice($defaults, 0, 2, true) +
@@ -801,9 +830,6 @@ class CustomBannersPlugin extends GoldPlugin
 			}
 		}
 		return $fonts;
-	}	
-
-	
-	
+	}
 }
 $ebp = new CustomBannersPlugin();

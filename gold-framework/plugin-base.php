@@ -14,13 +14,15 @@
 
 require_once('gold-plugins-custom-post-type.php');
 
-if(!class_exists("GoldPlugin")):
-	class GoldPlugin
+if(!class_exists("CBP_GoldPlugin")):
+	class CBP_GoldPlugin
 	{
 		var $customPostTypes = array();
 		var $taxonomies_to_register = array();
 		var $css_to_register = array();
+		var $admin_css_to_register = array();
 		var $scripts_to_register = array();
+		var $admin_scripts_to_register = array();
 		
 		function __construct()
 		{
@@ -59,8 +61,14 @@ if(!class_exists("GoldPlugin")):
 		{
 			$this->css_to_register[$handle] = array('handle' => $handle,
 													'file_url' => $file_url);
-			
 		}
+		
+		public function add_admin_stylesheet($handle, $file_url = '')
+		{
+			$this->admin_css_to_register[$handle] = array('handle' => $handle,
+														  'file_url' => $file_url);			
+		}
+		
 		public function add_script($handle, $file_url = '', $deps = array(), $ver = false, $in_footer = false)
 		{
 			$this->scripts_to_register[$handle] = array('handle' => $handle,
@@ -69,6 +77,16 @@ if(!class_exists("GoldPlugin")):
 														'ver' => $ver,
 														'in_footer' => $in_footer,													
 														);		
+		}
+
+		public function add_admin_script($handle, $file_url = '', $deps = array(), $ver = false, $in_footer = false)
+		{
+			$this->admin_scripts_to_register[$handle] = array('handle' => $handle,
+															'file_url' => $file_url,
+															'deps' => $deps,
+															'ver' => $ver,
+															'in_footer' => $in_footer,													
+														);
 		}
 		
 		/* Merges the specified $args with our hard coded defaults for a taxonomy */
@@ -142,9 +160,12 @@ if(!class_exists("GoldPlugin")):
 			}		
 		}
 		
-		/* this is the function to run on WordPress' init, that will register *all* of our css files and javascript files */
+		/* This is the function to run on WordPress' init, that will register *all* of our css files and javascript files 
+		 * Note: this is for FRONT END scripts
+		 */
 		function register_all_styles_and_scripts()
 		{
+			/* register front-end scripts and stylesheets */
 			foreach ($this->css_to_register as $style_handle => $style)
 			{
 				// register the stylesheet, then enqueue it
@@ -156,11 +177,27 @@ if(!class_exists("GoldPlugin")):
 				// register the script, then enqueue it
 				wp_register_script( $script['handle'], $script['file_url'], $script['deps'], $script['ver'], $script['in_footer'] );
 				wp_enqueue_script($script['handle']);
-
-				//var_dump($script);
-				//die();
 			}
-			
+		}
+		
+		/* this is the function to run on WordPress' init, that will register *all* of our css files and javascript files 
+		 * Note: this is for ADMIN scripts
+		 */
+		function register_all_admin_styles_and_scripts()
+		{			
+			/* register admin scripts and stylesheets */
+			foreach ($this->admin_scripts_to_register as $script_handle => $script)
+			{		
+				// register the script, then enqueue it
+				wp_register_script( $script['handle'], $script['file_url'], $script['deps'], $script['ver'], $script['in_footer'] );
+				wp_enqueue_script($script['handle']);
+			}
+			foreach ($this->admin_css_to_register as $style_handle => $style)
+			{
+				// register the stylesheet, then enqueue it
+				 wp_register_style($style['handle'], $style['file_url']);
+				 wp_enqueue_style ($style['handle']);
+			}						
 		}
 		
 		/* these functions are optionally to be overriden in a subclass */
@@ -168,6 +205,7 @@ if(!class_exists("GoldPlugin")):
 		{
 			add_action( 'init', array($this, 'register_all_taxonomies'), 0 );
 			add_action( 'wp_enqueue_scripts', array($this, 'register_all_styles_and_scripts') );
+			add_action( 'admin_enqueue_scripts', array($this, 'register_all_admin_styles_and_scripts') );
 			
 		}
 
