@@ -4,7 +4,7 @@ Plugin Name: Custom Banners
 Plugin Script: custom-banners.php
 Plugin URI: http://goldplugins.com/our-plugins/custom-banners/
 Description: Allows you to create custom banners, which consist of an image, text, a link, and a call to action.  Custom banners are easily output via shortcodes. Each visitor to the website is then shown a random custom banner.
-Version: 1.5.4
+Version: 1.5.5
 Author: GoldPlugins
 Author URI: http://goldplugins.com/
 
@@ -222,8 +222,10 @@ class CustomBannersPlugin extends CBP_GoldPlugin
 		// Generate the HTML for the requested banners (could be a single banner, or many)
 		if( $banner_id > 0 ) {
 			// A single banner ID was specified, so just load it directly
-			$banner = get_post($banner_id);			
-			$html .= $this->buildBannerHTML($banner, $banner_id, $atts);
+			$banner = $this->get_banner_by_id($banner_id);
+			if ($banner !== false) {
+				$html .= $this->buildBannerHTML($banner, $banner_id, $atts);
+			}
 		}
 		else {
 			// choose a banner based on the other attributes 	
@@ -257,6 +259,24 @@ class CustomBannersPlugin extends CBP_GoldPlugin
 		return $html;
 	}
 	
+	function get_banner_by_id($id, $respect_expiration = true)
+	{
+		$args = array(
+			'posts_per_page' => 1,
+			'p' => $id,
+			'post_type'=> 'banner',
+		);
+
+		/* Restrict by expiration date (optional) */
+		if ($respect_expiration) {
+			$args['meta_query'] = $this->ExpirationDate->get_meta_query();
+		}
+
+		$banners_query = new WP_Query( $args );
+		$banner = !empty($banners_query->posts) ? $banners_query->posts[0] : false;
+		return $banner;
+	}
+	
 	function get_banners_by_atts($atts)
 	{
 		$args = array(
@@ -265,19 +285,7 @@ class CustomBannersPlugin extends CBP_GoldPlugin
 			'post_type'=> 'banner',
 			'banner_groups' => $atts['group'],
 			'nopaging' => ($atts['count'] == '-1'), // turn paging off posts_per_page is unlimited
-			'meta_query' => array(
-				'relation' => 'OR',
-				array(
-					'key' => '_cbp_expiration_timestamp',
-					'value' => 'dummy', // prior to 3.9, SOME value is required even when using "NOT EXISTS"
-					'compare' => 'NOT EXISTS', // 'NOT EXISTS' required WP >= 3.5
-				),
-				array(
-					'key' => '_cbp_expiration_timestamp',
-					'value' => current_time('mysql'),
-					'compare' => '>',
-				)
-			)
+			'meta_query' => $this->ExpirationDate->get_meta_query()
 		);
 
 		$banners_query = new WP_Query( $args );

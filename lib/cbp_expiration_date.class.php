@@ -73,14 +73,14 @@ class CBP_ExpirationDate
 	function update_expiration_time($post_id)
 	{
 		global $post;
-		if ($post->post_type !== $this->post_type) {
+		if (empty($post) || ($post->post_type !== $this->post_type)) {
 			return;
 		}
 
 		if ($this->check_reset_to_never_flag() ) {
 			delete_post_meta($post_id, '_cbp_expiration_timestamp');
 			return;
-		}		
+		}
 		
 		$new_expiration = $this->get_new_expiration_date();
 		if ( $new_expiration && !is_wp_error($new_expiration) )
@@ -145,12 +145,34 @@ class CBP_ExpirationDate
 	}
 	
 	/**
+	 * Returns an array that can be used as the meta_query argument to WP_Query,
+	 * to restrict posts by expiration date
+	 */
+	function get_meta_query()
+	{
+		return array(
+			'relation' => 'OR',
+			array(
+				'key' => '_cbp_expiration_timestamp',
+				'value' => 'dummy', // prior to 3.9, SOME value is required even when using "NOT EXISTS"
+				'compare' => 'NOT EXISTS', // 'NOT EXISTS' required WP >= 3.5
+			),
+			array(
+				'key' => '_cbp_expiration_timestamp',
+				'value' => current_time('mysql'),
+				'compare' => '>',
+			)
+		);
+	}
+	
+	/**
 	 * Print out HTML form time + date elements for editing a banner's expiration date.
 	 * Based on WordPress' touch_time function
 	 *
 	 * @param array $post_date    Accepts a starting time. Defaults to current time.
 	 */
-	function expiration_time_input( $post_date = '' ) {
+	function expiration_time_input( $post_date = '' )
+	{
 		if ( empty($post_date) ) {
 			$post_date = current_time('mysql');
 		}
@@ -202,7 +224,7 @@ class CBP_ExpirationDate
 		echo '<div class="cbp-expiration-timestamp-wrap">';
 		/* translators: 1: month, 2: day, 3: year, 4: hour, 5: minute */
 		printf( __( '%1$s %2$s, %3$s @ %4$s : %5$s' ), $month, $day, $year, $hour, $minute );
-		echo '</div><input type="hidden" id="ss" name="ss" value="' . $ss . '" />';
+		echo '</div><input type="hidden" id="cbp-expiration-ss" name="cbp-expiration-ss" value="' . $ss . '" />';
 		if ( $multi ) return;
 		echo "\n\n";
 		$map = array(
