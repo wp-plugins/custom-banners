@@ -4,7 +4,7 @@ Plugin Name: Custom Banners
 Plugin Script: custom-banners.php
 Plugin URI: http://goldplugins.com/our-plugins/custom-banners/
 Description: Allows you to create custom banners, which consist of an image, text, a link, and a call to action.  Custom banners are easily output via shortcodes. Each visitor to the website is then shown a random custom banner.
-Version: 1.5.5
+Version: 1.5.6
 Author: GoldPlugins
 Author URI: http://goldplugins.com/
 
@@ -810,13 +810,24 @@ class CustomBannersPlugin extends CBP_GoldPlugin
 	// Enqueue any needed Google Web Fonts
 	function enqueue_webfonts()
 	{
-		$font_list = $this->list_required_google_fonts();
-		$font_list_encoded = array_map('urlencode', $this->list_required_google_fonts());
-		$font_str = implode('|', $font_list_encoded);
-		
+		$cache_key = '_custom_bs_webfont_str';
+		$font_str = get_transient($cache_key);
+		if ($font_str == false) {
+			$font_list = $this->list_required_google_fonts();
+			if ( !empty($font_list) ) {
+				$font_list_encoded = array_map('urlencode', $font_list);
+				$font_str = implode('|', $font_list_encoded);
+			} else {
+				$font_str = 'x';
+			}
+			set_transient($cache_key, $font_str);					
+		}
+
 		//don't register this unless a font is set to register
-		if(strlen($font_str)>2){
-			wp_register_style( 'custom_banners_webfonts', 'http://fonts.googleapis.com/css?family=' . $font_str);
+		if(strlen($font_str)>2) {
+			$protocol = is_ssl() ? 'https:' : 'http:';
+			$font_url = $protocol . '//fonts.googleapis.com/css?family=' . $font_str;
+			wp_register_style( 'custom_banners_webfonts', $font_url );
 			wp_enqueue_style( 'custom_banners_webfonts' );
 		}
 	}
@@ -825,6 +836,7 @@ class CustomBannersPlugin extends CBP_GoldPlugin
 	{
 		// check each typography setting for google fonts, and build a list
 		$option_keys = array(
+			'custom_banners_caption_font_family',
 			'custom_banners_cta_button_font_family',
 		);
 		$fonts = array();

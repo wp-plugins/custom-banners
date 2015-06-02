@@ -61,6 +61,7 @@ class customBannersOptions
 		register_setting( 'custom-banners-settings-group', 'custom_banners_registered_name' );
 		register_setting( 'custom-banners-settings-group', 'custom_banners_registered_url' );
 		register_setting( 'custom-banners-settings-group', 'custom_banners_registered_key' );
+		register_setting( 'custom-banners-settings-group', 'custom_banners_cache_buster', array($this, 'bust_options_cache') );
 
 		register_setting( 'custom-banners-style-settings-group', 'custom_banners_caption_background_color' );
 		register_setting( 'custom-banners-style-settings-group', 'custom_banners_caption_background_opacity' );
@@ -75,6 +76,7 @@ class customBannersOptions
 		register_setting( 'custom-banners-style-settings-group', 'custom_banners_caption_font_style' );
 		register_setting( 'custom-banners-style-settings-group', 'custom_banners_caption_font_family' );
 		register_setting( 'custom-banners-style-settings-group', 'custom_banners_caption_font_color' );
+		register_setting( 'custom-banners-style-settings-group', 'custom_banners_cache_buster', array($this, 'bust_options_cache') );
 	}
 	
 	//function to produce tabs on admin screen
@@ -388,6 +390,12 @@ class customBannersOptions
 	function help_settings_page(){
 		$this->settings_page_top();
 		include('pages/help.html');
-	}	
+	}
+	
+	function bust_options_cache()
+	{
+		delete_transient('_custom_bs_webfont_str');
+	}
+
 } // end class
 ?>
