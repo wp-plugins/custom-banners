@@ -149,10 +149,10 @@ class customBannersOptions
 			});
 		</script>
 		<!-- Begin MailChimp Signup Form -->		
-		<div id="signup_wrapper">
-			<div class="topper">
-				<h3>Save 20% on Custom Banners Pro!</h3>
-				<p class="pitch">Submit your name and email and we’ll send you a coupon for 20% off your upgrade to the Pro version.</p>
+		<div id="signup_wrapper" style="width: 330px;">
+			<div class="topper" style="background-color:forestgreen;">
+				<h3>Upgrade Now and Save 20%!</h3>
+				<p class="pitch">Subscribe to our newsletter, and we’ll send you a coupon good for 20%&nbsp;off your upgrade to Custom Banners Pro.</p>
 			</div>
 			<div id="mc_embed_signup">
 				<form action="" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
@@ -164,7 +164,7 @@ class customBannersOptions
 						<!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
 						<div style="position: absolute; left: -5000px;"><input type="text" name="b_403e206455845b3b4bd0c08dc_6ad78db648" tabindex="-1" value=""></div>
 					</div>
-					<div class="clear"><input type="submit" value="Send Me The Coupon Now" name="subscribe" id="mc-embedded-subscribe" class="smallBlueButton"></div>
+					<div class="clear"><input type="submit" value="Send Me The Coupon" name="subscribe" id="mc-embedded-subscribe" class="smallBlueButton"></div>
 					<p class="secure"><img src="<?php echo plugins_url( '../assets/img/lock.png', __FILE__ ); ?>" alt="Lock" width="16px" height="16px" />We respect your privacy.</p>
 					<input type="hidden" name="PRODUCT" value="Custom Banners Pro" />
 					<input type="hidden" id="mc-upgrade-plugin-name" value="Custom Banners Pro" />
@@ -173,12 +173,11 @@ class customBannersOptions
 					<input type="hidden" id="mc-upgrade-link-dev" value="http://goldplugins.com/purchase/custom-banners-pro/developer?promo=newsub20" />
 				</form>
 				<div class="features">
-					<strong>When you upgrade, you'll instantly gain access to:</strong>
+					<strong>With your upgrade to Pro, you'll instantly unlock:</strong>
 					<ul>
-						<li>Fading Banner Widget</li>
-						<li>Advanced Transitions</li>
-						<li>Outstanding support</li>
-						<li>Remove all banners from the admin area</li>
+						<li>The Rotating Banner Widget</li>
+						<li>All Style &amp; Typography Options</li>
+						<li>Outstanding Support</li>
 						<li>And more!</li>
 					</ul>
 					<a href="http://goldplugins.com/our-plugins/custom-banners?utm_source=cpn_box&utm_campaign=upgrade&utm_banner=learn_more" title="Learn More">Learn More About Custom Banners Pro &raquo;</a>

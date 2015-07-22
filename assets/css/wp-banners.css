@@ -1,6 +1,7 @@
 .banner_wrapper .banner {
 	background-size: cover;
 	border: 1px solid black;
+	box-sizing: content-box;
 	height: 300px;
 	position: relative;
 	max-height: 100%;

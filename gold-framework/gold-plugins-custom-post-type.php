@@ -60,6 +60,7 @@ class GoldPlugins_CustomPostType
 				'capability_type' => 'post',
 				'hierarchical' => false,
 				'supports' => array('title','editor','author','thumbnail','excerpt','comments','custom-fields'),
+				'menu_icon' => 'dashicons-images-alt', //GRH: non-standard; needs to be merged into gold-framework
 			); 
 			$this->customPostTypeArgs = $args;
 	
