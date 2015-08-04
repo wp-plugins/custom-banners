@@ -551,6 +551,7 @@ div.custom_banners_not_registered > p {
 }
 .widget-content .gp_widget_form_wrapper fieldset.radio_text_input .bikeshed_radio {
 	margin-top: -15px;
+	padding-left: 2px;
 }
 .widget-content .gp_widget_form_wrapper fieldset.radio_text_input .bikeshed_radio p {
 	margin-top: 0;
@@ -575,4 +576,17 @@ div.custom_banners_not_registered > p {
 
 .gp_widget_form_wrapper select {
 	width: 99%;
+}
+
+.gp_widget_form_wrapper .radio_wrapper.radio_group {
+    margin-bottom: 25px;
+}
+
+.gp_widget_form_wrapper .radio_group .radio_group_label {
+    margin: 0 10px -5px 0;
+    font-weight: normal;
+}
+
+.gp_widget_form_wrapper .radio_group p {
+    padding-left: 6px;
 }

@@ -4,7 +4,7 @@ Plugin Name: Custom Banners
 Plugin Script: custom-banners.php
 Plugin URI: http://goldplugins.com/our-plugins/custom-banners/
 Description: Allows you to create custom banners, which consist of an image, text, a link, and a call to action.  Custom banners are easily output via shortcodes. Each visitor to the website is then shown a random custom banner.
-Version: 1.6
+Version: 1.7
 Author: GoldPlugins
 Author URI: http://goldplugins.com/
 
@@ -19,6 +19,7 @@ require_once('lib/cbp_expiration_date.class.php');
 class CustomBannersPlugin extends CBP_GoldPlugin
 {
 	var $transitions = array('fade','fadeIn','fadeOut','scrollHorz','scrollVert','shuffle','carousel','flipHorz','flipVert','tileSlide');
+	var $free_transitions = array('fade','scrollHorz');
 	
 	function __construct()
 	{
@@ -212,9 +213,21 @@ class CustomBannersPlugin extends CBP_GoldPlugin
 							'hide' => false,
 							'width' => get_option('custom_banners_default_width', ''),
 							'height' => get_option('custom_banners_default_height', ''),
-							'pause_on_hover' => false
+							'pause_on_hover' => false,
+							'auto_height' => false,
+							'prev_next' => false,
+							'paused' => false,
+							'banner_height' => 'specify',
+							'banner_height_px' => '420',
+							'banner_width' => 'specify',
+							'banner_width_px' => '300',
+							'link_entire_banner' => 0,
+							'open_link_in_new_window' => 0,
+							'show_caption' => 1,
+							'show_cta_button' => 1
 						);
-							
+
+						
 		$atts = shortcode_atts($defaults, $atts);
 		$banner_id = intval($atts['id']);
 		
@@ -231,7 +244,12 @@ class CustomBannersPlugin extends CBP_GoldPlugin
 		else {
 			// choose a banner based on the other attributes 	
 			$banners = $this->get_banners_by_atts($atts);
-			$slideshow = ( isValidCBKey() && (in_array($atts['transition'], $this->transitions)) );
+			$slideshow = ( (in_array($atts['transition'], $this->transitions)) );
+			if ( !isValidCBKey() && $slideshow && strlen($atts['transition']) > 0 ) {
+				if ( !(in_array($atts['transition'], $this->free_transitions)) ) {					
+					$atts['transition'] = 'fade';
+				}
+			}
 
 			// start the slideshow's HTML (if required)
 			if( $slideshow ) {
@@ -435,14 +453,12 @@ class CustomBannersPlugin extends CBP_GoldPlugin
 		$cssUrl = plugins_url( 'assets/css/wp-banners.css' , __FILE__ );
 		$this->add_stylesheet('wp-banners-css',  $cssUrl);
 		
-		if(isValidCBKey()){  
-			//need to include cycle2 this way, for compatibility with our other plugins
-			$jsUrl = plugins_url( 'assets/js/jquery.cycle2.min.js' , __FILE__ );
-			$this->add_script('cycle2',  $jsUrl, array( 'jquery' ),	false, true);
-			
-			$jsUrl = plugins_url( 'assets/js/wp-banners.js' , __FILE__ );
-			$this->add_script('wp-banners-js',  $jsUrl, array( 'jquery' ), false, true);
-		}
+		//need to include cycle2 this way, for compatibility with our other plugins
+		$jsUrl = plugins_url( 'assets/js/jquery.cycle2.min.js' , __FILE__ );
+		$this->add_script('cycle2',  $jsUrl, array( 'jquery' ),	false, true);
+		
+		$jsUrl = plugins_url( 'assets/js/wp-banners.js' , __FILE__ );
+		$this->add_script('wp-banners-js',  $jsUrl, array( 'jquery' ), false, true);
 	}
 	
 	//this is the heading of the new column we're adding to the banner posts list

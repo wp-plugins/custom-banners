@@ -3,7 +3,7 @@ Contributors: ghuger, richardgabriel
 Tags: banners, ads, rotating banners, custom banners, custom ads, custom rotating banners, random banners, random rotating banners
 Requires at least: 3.8
 Tested up to: 4.2.2
-Stable tag: 1.6
+Stable tag: 1.7
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -101,13 +101,14 @@ You have a few things to pay attention to:
 - To use an image tag, instead of background image, for the banner, add the attribute "use_image_tag=true" to your banner shortcode.  For example, ```[banner use_image_tag=true]```.
 
 ### Outputting Fading or Sliding Banners ###
-* NOTE: This feature requires the [Pro version of Custom Banners](http://goldplugins.com/our-plugins/custom-banners/ "Custom Banners Pro")
-* LIVE Examples are available [here](http://goldplugins.com/documentation/custom-banners-documentation/custom-banners-pro-examples/ "Custom Banners Pro Examples")
 - To output Random Banners from a Specific Group, place the shortcode ```[banner group='test' count='3' transition='scrollHorz' timer='2000']``` in the desired area of the Page or Post Content.  Change the value of count from 3 to however many slides you want to use.  For transition, use either 'scrollHorz' or 'fade'.  For timer, use 1000 times the number of seconds you want between transitions (ie, for 4 seconds input 4000.)
 - To output Random Banners, place the shortcode ```[banner count='3' transition='scrollHorz' timer='2000']``` in the desired area of the Page or Post Content.  Change the value of count from 3 to however many slides you want to use.  For transition, use either 'scrollHorz' or 'fade'.  For timer, use 1000 times the number of seconds you want between transitions (ie, for 4 seconds input 4000.)
-- Supported transitions are ```scrollVert```,```scrollHorz```,```fade```,```fadeOut```,```flipHorz```,```flipVert```, and ```tileSlide```.
+- Free Transitions include ```scrollHorz```,```fade```
 - To Show Pager Icons below your Banner, use the attribute ```pager='true'``` or ```pager='1'```.  On the Widget, check the box next to Show Pager Icons.
 - To have the Slideshow Pause on Hover, use the attribute ```pause_on_hover=true```.  Defaults to false.
+* NOTE: Advanced Transitions are Included in the [Pro version of Custom Banners](http://goldplugins.com/our-plugins/custom-banners/ "Custom Banners Pro")
+* LIVE Examples are available [here](http://goldplugins.com/documentation/custom-banners-documentation/custom-banners-pro-examples/ "Custom Banners Pro Examples")
+- Supported Advanced Transitions are ```scrollVert```,```fadeOut```,```flipHorz```,```flipVert```, and ```tileSlide```.
 
 == Frequently Asked Questions ==
 
@@ -131,6 +132,10 @@ No worries!  This probably means the image you are using doesn't match the size 
 
 OK!  This usually happens when there isn't a default Height and Width set on your Basic Options, causing the dimensions to not be correctly set on your slides.  All you have to do is adjust the Default Banner Width and Default Banner Height to suit your needs!
 
+= Yarg! In the Widget, I've set my Banner Height to Auto but a pixel value is still being used.  Why? =
+
+Unless you are using the Use Image Tag option, the height of the banner will default to a pixel value to prevent the banner from having no height.
+
 == Screenshots ==
 
 1. This is the Add New Banner Page.
@@ -143,6 +148,9 @@ OK!  This usually happens when there isn't a default Height and Width set on you
 8. This is the Help & Settings Page.  You can use this page for instructions on how to use the plugin.
 
 == Changelog ==
+
+= 1.7 =
+* Adds Rotating Banner Widget, Minor Updates.
 
 = 1.6 =
 * Adds Single Banner Widget, Minor Updates.
@@ -237,4 +245,4 @@ OK!  This usually happens when there isn't a default Height and Width set on you
 
 == Upgrade Notice ==
 
-* 1.6: Adds Single Banner Widget, Minor Updates.
+* 1.7: Adds Rotating Banner Widget, as well as misc. minor updates.

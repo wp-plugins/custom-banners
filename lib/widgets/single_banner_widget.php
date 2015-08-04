@@ -104,26 +104,31 @@ class singleBannerWidget extends WP_Widget
 						</div>
 					</div>
 				</fieldset>
-				<p>
-					<input class="widefat" id="<?php echo $this->get_field_id('show_caption'); ?>" name="<?php echo $this->get_field_name('show_caption'); ?>" type="checkbox" value="1" <?php if($show_caption){ ?>checked="checked"<?php } ?>/>
-					<label for="<?php echo $this->get_field_id('show_caption'); ?>">Show Caption Box</label>
-				</p>
-				<p>
-					<input class="widefat" id="<?php echo $this->get_field_id('show_cta_button'); ?>" name="<?php echo $this->get_field_name('show_cta_button'); ?>" type="checkbox" value="1" <?php if($show_cta_button){ ?>checked="checked"<?php } ?>/>
-					<label for="<?php echo $this->get_field_id('show_cta_button'); ?>">Show Button</label>
-				</p>
-				<p>
-					<input class="widefat" id="<?php echo $this->get_field_id('link_entire_banner'); ?>" name="<?php echo $this->get_field_name('link_entire_banner'); ?>" type="checkbox" value="1" <?php if($link_entire_banner){ ?>checked="checked"<?php } ?>/>
-					<label for="<?php echo $this->get_field_id('link_entire_banner'); ?>">Link Entire Banner</label>
-				</p>
-				<p>
-					<input class="widefat" id="<?php echo $this->get_field_id('open_link_in_new_window'); ?>" name="<?php echo $this->get_field_name('open_link_in_new_window'); ?>" type="checkbox" value="1" <?php if($open_link_in_new_window){ ?>checked="checked"<?php } ?>/>
-					<label for="<?php echo $this->get_field_id('open_link_in_new_window'); ?>">Open Link In New Window</label>
-				</p>
-				<p>
-					<input class="widefat" id="<?php echo $this->get_field_id('use_image_tag'); ?>" name="<?php echo $this->get_field_name('use_image_tag'); ?>" type="checkbox" value="1" <?php if($use_image_tag){ ?>checked="checked"<?php } ?>/>
-					<label for="<?php echo $this->get_field_id('use_image_tag'); ?>">Use Image Tag</label>
-				</p>
+				<fieldset class="radio_text_input">
+					<legend>Advanced Options:</legend> &nbsp;
+					<div class="bikeshed bikeshed_radio">
+						<p>
+							<input class="widefat" id="<?php echo $this->get_field_id('show_caption'); ?>" name="<?php echo $this->get_field_name('show_caption'); ?>" type="checkbox" value="1" <?php if($show_caption){ ?>checked="checked"<?php } ?>/>
+							<label for="<?php echo $this->get_field_id('show_caption'); ?>">Show Caption Box</label>
+						</p>
+						<p>
+							<input class="widefat" id="<?php echo $this->get_field_id('show_cta_button'); ?>" name="<?php echo $this->get_field_name('show_cta_button'); ?>" type="checkbox" value="1" <?php if($show_cta_button){ ?>checked="checked"<?php } ?>/>
+							<label for="<?php echo $this->get_field_id('show_cta_button'); ?>">Show Button</label>
+						</p>
+						<p>
+							<input class="widefat" id="<?php echo $this->get_field_id('link_entire_banner'); ?>" name="<?php echo $this->get_field_name('link_entire_banner'); ?>" type="checkbox" value="1" <?php if($link_entire_banner){ ?>checked="checked"<?php } ?>/>
+							<label for="<?php echo $this->get_field_id('link_entire_banner'); ?>">Link Entire Banner</label>
+						</p>
+						<p>
+							<input class="widefat" id="<?php echo $this->get_field_id('open_link_in_new_window'); ?>" name="<?php echo $this->get_field_name('open_link_in_new_window'); ?>" type="checkbox" value="1" <?php if($open_link_in_new_window){ ?>checked="checked"<?php } ?>/>
+							<label for="<?php echo $this->get_field_id('open_link_in_new_window'); ?>">Open Link In New Window</label>
+						</p>
+						<p>
+							<input class="widefat" id="<?php echo $this->get_field_id('use_image_tag'); ?>" name="<?php echo $this->get_field_name('use_image_tag'); ?>" type="checkbox" value="1" <?php if($use_image_tag){ ?>checked="checked"<?php } ?>/>
+							<label for="<?php echo $this->get_field_id('use_image_tag'); ?>">Use Image Tag</label>
+						</p>
+					</div>
+				</fieldset>
 			</div>
 			<?php
 	}
