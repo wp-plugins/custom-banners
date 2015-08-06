@@ -2,8 +2,8 @@
 Contributors: ghuger, richardgabriel
 Tags: banners, ads, rotating banners, custom banners, custom ads, custom rotating banners, random banners, random rotating banners
 Requires at least: 3.8
-Tested up to: 4.2.2
-Stable tag: 1.7
+Tested up to: 4.2.4
+Stable tag: 1.7.1
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -149,6 +149,9 @@ Unless you are using the Use Image Tag option, the height of the banner will def
 
 == Changelog ==
 
+= 1.7.1 =
+* Fix issue with banner shortcode defaults.
+
 = 1.7 =
 * Adds Rotating Banner Widget, Minor Updates.
 
@@ -245,4 +248,4 @@ Unless you are using the Use Image Tag option, the height of the banner will def
 
 == Upgrade Notice ==
 
-* 1.7: Adds Rotating Banner Widget, as well as misc. minor updates.
+* 1.7.1: Fix issue with banner shortcode defaults.

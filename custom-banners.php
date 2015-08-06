@@ -4,7 +4,7 @@ Plugin Name: Custom Banners
 Plugin Script: custom-banners.php
 Plugin URI: http://goldplugins.com/our-plugins/custom-banners/
 Description: Allows you to create custom banners, which consist of an image, text, a link, and a call to action.  Custom banners are easily output via shortcodes. Each visitor to the website is then shown a random custom banner.
-Version: 1.7
+Version: 1.7.1
 Author: GoldPlugins
 Author URI: http://goldplugins.com/
 
@@ -217,17 +217,16 @@ class CustomBannersPlugin extends CBP_GoldPlugin
 							'auto_height' => false,
 							'prev_next' => false,
 							'paused' => false,
-							'banner_height' => 'specify',
-							'banner_height_px' => '420',
-							'banner_width' => 'specify',
-							'banner_width_px' => '300',
-							'link_entire_banner' => 0,
-							'open_link_in_new_window' => 0,
-							'show_caption' => 1,
-							'show_cta_button' => 1
+							'banner_height' => '',
+							'banner_height_px' =>get_option('custom_banners_default_height', ''),
+							'banner_width' => '',
+							'banner_width_px' =>  get_option('custom_banners_default_width', ''),
+							'link_entire_banner' => get_option('custom_banners_use_big_link', 0),
+							'open_link_in_new_window' => get_option('custom_banners_open_link_in_new_window', 0),
+							'show_caption' => !get_option('custom_banners_never_show_captions', 1),
+							'show_cta_button' => !get_option('custom_banners_never_show_cta_buttons', 1)
 						);
 
-						
 		$atts = shortcode_atts($defaults, $atts);
 		$banner_id = intval($atts['id']);
 		
